@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+    <title>Tic Tac CrypToe</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+          crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Architects+Daughter" rel="stylesheet">
+    <script src="/app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+    <div class="game-board container">
+        <div class="game-message-row row">
+            <div class="col">
+                <p class="game-message-text" id="game-message-text">Your turn Player 0!</p>
+            </div>
+        </div>
+        <div class="game-row row" id="game-row-1">
+            <div class="game-cell col" id="game-cell-0-0">
+              <p class="game-cell-text" id="game-cell-text-0-0">&nbsp;</p>
+            </div>
+            <div class="game-cell col" id="game-cell-1-0">
+              <p class="game-cell-text" id="game-cell-text-1-0">&nbsp;</p>
+            </div>
+            <div class="game-cell col" id="game-cell-2-0">
+              <p class="game-cell-text" id="game-cell-text-2-0">&nbsp;</p>
+            </div>
+        </div>
+        <div class="game-row row" id="game-row-2">
+            <div class="game-cell col" id="game-cell-0-1">
+              <p class="game-cell-text" id="game-cell-text-0-1">&nbsp;</p>
+            </div>
+            <div class="game-cell col" id="game-cell-1-1">
+              <p class="game-cell-text" id="game-cell-text-1-1">&nbsp;</p>
+            </div>
+            <div class="game-cell col" id="game-cell-2-1">
+              <p class="game-cell-text" id="game-cell-text-2-1">&nbsp;</p>
+            </div>
+        </div>
+        <div class="game-row row" id="game-row-3">
+            <div class="game-cell col" id="game-cell-0-2">
+              <p class="game-cell-text" id="game-cell-text-0-2">&nbsp;</p>
+            </div>
+            <div class="game-cell col" id="game-cell-1-2">
+              <p class="game-cell-text" id="game-cell-text-1-2">&nbsp;</p>
+            </div>
+            <div class="game-cell col" id="game-cell-2-2">
+              <p class="game-cell-text" id="game-cell-text-2-2">&nbsp;</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
+
+    <script>
+        window.addEventListener('load', function() {
+          // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+          if (typeof web3 !== 'undefined') {
+            console.log("Using web3 detected from external source.")
+            // Use Mist/MetaMask's provider
+            window.web3 = new Web3(web3.currentProvider);
+          } else {
+            console.warn("No web3 detected. Falling back to http://127.0.0.1:7545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+            // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+            window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+          }
+
+          TicTacCryptoe.init();
+        });
+    </script>
+</body>
+</html>
