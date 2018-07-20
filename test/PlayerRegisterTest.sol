@@ -25,6 +25,9 @@ contract PlayerRegisterTest {
   function testCanRegisterPlayer() public {
     PlayerRegister register = new PlayerRegister();
     register.newPlayer("player0");
+    string memory name;
+    (,,name) = register.players(0);
+    Assert.equal(name, "player0", "Player was not registered!");
   }
 
   function testCannotRegisterTheSamePlayerTwice() public {
