@@ -11,15 +11,38 @@ contract PlayerRegisterTest {
     return self.call(sig);
   }
 
+  function registerTwice() public {
+    PlayerRegister register = new PlayerRegister();
+    register.newPlayer("player0");
+    register.newPlayer("player1");
+  }
+
+  function getPlayerNameWithoutRegistering() public {
+    PlayerRegister register = new PlayerRegister();
+    register.getPlayerName();
+  }
+
   function testCanRegisterPlayer() public {
     PlayerRegister register = new PlayerRegister();
     register.newPlayer("player0");
   }
 
   function testCannotRegisterTheSamePlayerTwice() public {
+    Assert.isFalse(execute('registerTwice()'), "Error was not produced!");
+  }
+
+  function testCanRetrievePlayerNameAfterRegistration() public {
     PlayerRegister register = new PlayerRegister();
     register.newPlayer("player0");
-    Assert.isFalse(execute('newPlayer("player1")'), "Error was not produced!");
+    Assert.equal(
+      "player0",
+      register.getPlayerName(),
+      "Could not retrieve player name after registering!"
+    );
+  }
+
+  function testCannotRetrievePlayerNameIfNotRegistered() public {
+    Assert.isFalse(execute('getPlayerNameWithoutRegistering()'), "Error was not produced!");
   }
 }
 
