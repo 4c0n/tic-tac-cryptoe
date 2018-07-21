@@ -1,10 +1,6 @@
 // Import the page's CSS. Webpack will know what to do with it.
 import "../stylesheets/app.css";
 
-// Import libraries we need.
-import { default as Web3} from 'web3';
-import { default as contract } from 'truffle-contract'
-
 const PLAYER_0_WON = 'PLAYER 0 WON';
 const PLAYER_1_WON = 'PLAYER 1 WON';
 const MORE_MOVES_POSSIBLE = 'MORE MOVES POSSIBLE';
@@ -69,8 +65,20 @@ window.TicTacCryptoe = {
   },
 
   init: function() {
-    this._registerHandlers();
+    // is a registered player?
     this._game = new TicTacCryptoeGame();
+    let playerName;
+
+    this.whoAmI().then(function(name) {
+      playerName = name;
+    }).catch(function(e) {
+      console.log(e);
+      // show dialog
+      $('.player-info').show();
+      $('.player-registration-dialog').show();
+      $('.game-board').show();
+    });
+    //this._registerHandlers();
   },
 
   isItMyTurn: function() {
@@ -105,78 +113,3 @@ window.TicTacCryptoe = {
   }
 };
 
-/*-------------------------------------------------------------------------*/
-// TODO: split off to separate file
-function TicTacCryptoeGame() {
-  this._state = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null]
-  ];
-  this._currentPlayerId = 0;
-}
-
-TicTacCryptoeGame.prototype.isItMyTurn = function() {
-  return this.whoAmI() === this._currentPlayerId;
-};
-
-TicTacCryptoeGame.prototype.isCellOccupied = function(coords) {
-  return this._state[coords.y][coords.x] !== null;
-};
-
-TicTacCryptoeGame.prototype.whoAmI = function() {
-  return this._currentPlayerId;
-};
-
-TicTacCryptoeGame.prototype.makeMove = function(coords, playerId) {
-  this._state[coords.y][coords.x] = playerId;
-
-  setTimeout(this.gameStateChangedListener.bind(this, this._state));
-};
-
-TicTacCryptoeGame.prototype.getGameState = function() {
-  if (this.iAmAWinner(0)) {
-    return PLAYER_0_WON;
-  } else if (this.iAmAWinner(1)) {
-    return PLAYER_1_WON;
-  } else if (this.moreMovesPossible()) {
-    return MORE_MOVES_POSSIBLE;
-  } else {
-    return DRAW;
-  }
-};
-
-TicTacCryptoeGame.prototype.iAmAWinner = function(playerId) {
-  if (this._state[0][0] === playerId && this._state[0][1] === playerId && this._state[0][2] === playerId ||
-    this._state[1][0] === playerId && this._state[1][1] === playerId && this._state[1][2] === playerId ||
-    this._state[2][0] === playerId && this._state[2][1] === playerId && this._state[2][2] === playerId ||
-    this._state[0][0] === playerId && this._state[1][0] === playerId && this._state[2][0] === playerId ||
-    this._state[0][1] === playerId && this._state[1][1] === playerId && this._state[2][1] === playerId ||
-    this._state[0][2] === playerId && this._state[1][2] === playerId && this._state[2][2] === playerId ||
-    this._state[0][0] === playerId && this._state[1][1] === playerId && this._state[2][2] === playerId ||
-    this._state[0][2] === playerId && this._state[1][1] === playerId && this._state[2][0] === playerId) {
-
-    return true;
-  }
-};
-
-// TODO: could also be done by keeping track of the number of moves made
-TicTacCryptoeGame.prototype.moreMovesPossible = function() {
-  for (let row of this._state) {
-    for (let value of row) {
-      if (value === null) {
-        return true;
-      }
-    }
-  }
-};
-
-TicTacCryptoeGame.prototype.gameStateChangedListener = function(state) {
-  this._state = state;
-
-  if (this._currentPlayerId === 0) {
-    this._currentPlayerId = 1;
-  } else {
-    this._currentPlayerId = 0;
-  }
-};
