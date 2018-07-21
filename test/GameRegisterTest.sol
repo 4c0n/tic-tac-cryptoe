@@ -2,26 +2,8 @@ pragma solidity ^0.4.24;
 
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
+import "./ThrowProxy.sol";
 import "../contracts/GameRegister.sol";
-
-// Proxy contract for testing throws
-contract ThrowProxy {
-  address public target;
-  bytes data;
-
-  constructor(address _target) public {
-    target = _target;
-  }
-
-  //prime the data using the fallback function.
-  function() public {
-    data = msg.data;
-  }
-
-  function execute() public returns (bool) {
-    return target.call(data);
-  }
-}
 
 contract GameRegisterTest {
   function testCanStartNewGame() public {
