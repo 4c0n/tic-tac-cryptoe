@@ -1,6 +1,7 @@
 .game-board {
   width: 600px;
   height: 600px;
+  display: none;
 }
 
 .game-message-text {
@@ -55,3 +56,72 @@
   border-right-style: solid;
 }
 
+.player-info {
+  display: none;
+}
+.player-name-label-text {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.5em;
+}
+
+.player-name-text {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.5em;
+}
+
+.player-wincount-label-text {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.5em;
+}
+
+.player-wincount-text {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.5em;
+}
+
+.player-losscount-label-text {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.5em;
+}
+
+.player-losscount-text {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.5em;
+}
+
+.player-info-row {
+  border-bottom-style: solid;
+  vertical-align: middle;
+  margin-top: 25px;
+}
+
+.player-registration-dialog-popup {
+  border-style: solid;
+}
+
+.player-registration-dialog-popup-inner-pane {
+  margin: 50px;
+}
+
+.player-registration-dialog-text {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1em;
+}
+
+.player-registration-dialog-input {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 0.8em;
+}
+
+.player-registration-dialog-button {
+  font-family: 'Architects Daughter', cursive;
+  background-color: white;
+}
+
+.player-registration-dialog-button-cell {
+  margin-top: 25px;
+}
+
+.player-registration-dialog-title {
+  font-family: 'Architects Daughter', cursive;
+}
