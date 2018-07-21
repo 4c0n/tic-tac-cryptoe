@@ -70,7 +70,11 @@ contract GameRegisterTest {
     bool r2 = throwProxy.execute.gas(200000)();
     Assert.isTrue(r2, "r2 was supposed to be true");
 
-    // TODO: check that only 1 game exists
+    Assert.equal(
+      register.getGameCount(),
+      1,
+      "There should only be 1 game!"
+    );
   }
 }
 

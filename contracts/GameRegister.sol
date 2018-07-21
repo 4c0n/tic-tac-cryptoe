@@ -50,4 +50,8 @@ contract GameRegister is PlayerRegister {
             emit QueuedGame(playerId, gameId);
         }
     }
+
+    function getGameCount() public view returns (uint) {
+        return games.length;
+    }
 }
