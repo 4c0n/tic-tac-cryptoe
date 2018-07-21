@@ -15,7 +15,7 @@ contract PlayerRegister is Ownable {
     // the index stored in the uint is off by +1.
     mapping (address => uint) ownerToPlayer;
 
-    event NewPlayer(address indexed _from, string indexed name);
+    event NewPlayer(address indexed _from, string name);
 
     function requirePlayerExist() internal view returns (bool) {
         require(
