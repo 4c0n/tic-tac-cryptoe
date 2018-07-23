@@ -15,6 +15,16 @@ window.TicTacCryptoe = {
     });
   },
 
+  _registerDialogHandlers: function() {
+    $('.player-registration-dialog-button').click((event) => {
+      this._game.newPlayer($('player-registration-dialog-input').val()).then(function() {
+        console.log('Player registration completed without error...');
+      }).catch(function(e) {
+        console.error(e);
+      });
+    });
+  },
+
   _cellClickHandler: function(cellElement) {
     // Check if it is really the users turn to play
     if (!this.isItMyTurn()) {
@@ -64,6 +74,7 @@ window.TicTacCryptoe = {
     return {x: x, y: y};
   },
 
+
   init: function() {
     // is a registered player?
     this._game = new TicTacCryptoeGame();
@@ -71,14 +82,20 @@ window.TicTacCryptoe = {
 
     this.whoAmI().then(function(name) {
       playerName = name;
-    }).catch(function(e) {
+      console.log('Player: ', playerName);
+    }).catch((e) => {
       console.log(e);
       // show dialog
-      $('.player-info').show();
-      $('.player-registration-dialog').show();
-      $('.game-board').show();
-    });
+      this._showPlayerRegistrationDialog();
+   });
     //this._registerHandlers();
+  },
+
+  _showPlayerRegistrationDialog: function() {
+    this._registerDialogHandlers();
+    $('.player-info').show();
+    $('.player-registration-dialog').show();
+    $('.game-board').show();
   },
 
   isItMyTurn: function() {

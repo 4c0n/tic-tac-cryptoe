@@ -9,21 +9,26 @@ var MovesRegister = contract(movesregister_artifacts);
 var account;
 
 window.TicTacCryptoeGame = function() {
-  /*this._state = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null]
-  ];
-  this._currentPlayerId = 0;*/
   MovesRegister.setProvider(web3.currentProvider);
   web3.eth.getAccounts(function(err, accounts) {
     account = accounts[0];
+    web3.eth.defaultAccount = account;
+    MovesRegister.web3.eth.defaultAccount = account;
+    console.log(account);
   });
 }
 
 window.TicTacCryptoeGame.prototype.whoAmI = function() {
   return MovesRegister.deployed().then(function(instance) {
+    console.log(account);
     return instance.getPlayerName.call({from: account});
+  });
+};
+
+window.TicTacCryptoeGame.prototype.newPlayer = function(playerName) {
+  return MovesRegister.deployed().then(function(instance) {
+    console.log(account);
+    return instance.newPlayer(playerName, {from: account});
   });
 };
 
