@@ -14,20 +14,17 @@ window.TicTacCryptoeGame = function() {
     account = accounts[0];
     web3.eth.defaultAccount = account;
     MovesRegister.web3.eth.defaultAccount = account;
-    console.log(account);
   });
 }
 
 window.TicTacCryptoeGame.prototype.whoAmI = function() {
   return MovesRegister.deployed().then(function(instance) {
-    console.log(account);
     return instance.getPlayerName.call({from: account});
   });
 };
 
 window.TicTacCryptoeGame.prototype.newPlayer = function(playerName) {
-  return MovesRegister.deployed().then(function(instance) {
-    console.log(account);
+  return MovesRegister.deployed().then((instance) => {
     return instance.newPlayer(playerName, {from: account});
   });
 };
