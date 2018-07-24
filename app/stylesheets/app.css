@@ -141,3 +141,12 @@
 .player-registration-dialog-title {
   font-family: 'Architects Daughter', cursive;
 }
+
+.player-registration-dialog-error {
+  display: none;
+}
+
+.player-registration-dialog-error-text {
+  font-family: 'Architects Daughter', bold;
+  color: #ff0000;
+}
