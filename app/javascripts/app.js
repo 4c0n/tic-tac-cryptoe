@@ -17,12 +17,42 @@ window.TicTacCryptoe = {
 
   _registerDialogHandlers: function() {
     $('.player-registration-dialog-button').click((event) => {
-      this._game.newPlayer($('player-registration-dialog-input').val()).then(function() {
-        console.log('Player registration completed without error...');
+      this._game.newPlayer($('#player-registration-dialog-input').val()).then(function() {
+        $('.player-registration-dialog').hide();
       }).catch(function(e) {
+        $('.player-registration-dialog-error').show();
         console.error(e);
       });
     });
+  },
+
+  _initPlayerInfoAndGameBoard: function(playerName = null) {
+    this._initPlayerInfo(playerName);
+    this._initGameBoard();
+  },
+
+  __initPlayerInfo: function(playerName) {
+    $('.player-info').show();
+    $('.player-info').css("opacity", 1);
+    $('.player-name-text').html(playerName);
+  },
+
+  _initPlayerInfo: function(playerName = null) {
+    if (playerName === null) {
+      this.whoAmI().then((name) => {
+        this.__initPlayerInfo(name);
+      }).catch(function(e) {
+        console.error(e);
+        // TODO properly handle this error
+      });
+    } else {
+      this.__initPlayerInfo(playerName);
+    }
+  },
+
+  _initGameBoard: function() {
+    $('.game-board').show();
+    $('.game-board').css("opacity", 1);
   },
 
   _cellClickHandler: function(cellElement) {
@@ -80,11 +110,11 @@ window.TicTacCryptoe = {
     this._game = new TicTacCryptoeGame();
     let playerName;
 
-    this.whoAmI().then(function(name) {
+    this.whoAmI().then((name) => {
       playerName = name;
-      console.log('Player: ', playerName);
+      this._initPlayerInfoAndGameBoard();
     }).catch((e) => {
-      console.log(e);
+      console.error(e);
       // show dialog
       this._showPlayerRegistrationDialog();
    });
