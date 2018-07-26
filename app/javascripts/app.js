@@ -19,9 +19,11 @@ window.TicTacCryptoe = {
     $('.player-registration-dialog-button').click((event) => {
       this._game.listenForNewPlayerEvent((error, result) => {
         if (!error) {
-          console.log('NewPlayer event received: ', result);
-          // TODO: check if this event was send from our account
-          this._initPlayerInfoAndGameBoard();
+          console.log('NewPlayer event received: ', result, window.web3account);
+          // check if this event was send from our account
+          if (result.args._from === window.web3account) {
+            this._initPlayerInfoAndGameBoard();
+          }
         } else {
           // TODO: properly handle this error
           console.error(error);

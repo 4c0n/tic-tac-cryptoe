@@ -6,26 +6,26 @@ import { default as contract } from 'truffle-contract';
 import movesregister_artifacts from '../../build/contracts/MovesRegister.json';
 
 var MovesRegister = contract(movesregister_artifacts);
-var account;
+window.web3account; // TODO: get rid of this global (just use web3 default account)
 
 window.TicTacCryptoeGame = function() {
   MovesRegister.setProvider(web3.currentProvider);
   web3.eth.getAccounts(function(err, accounts) {
-    account = accounts[0];
-    web3.eth.defaultAccount = account;
-    MovesRegister.web3.eth.defaultAccount = account;
+    window.web3account = accounts[0];
+    web3.eth.defaultAccount = window.web3account;
+    MovesRegister.web3.eth.defaultAccount = window.web3account;
   });
 }
 
 window.TicTacCryptoeGame.prototype.whoAmI = function() {
   return MovesRegister.deployed().then(function(instance) {
-    return instance.getPlayerName.call({from: account});
+    return instance.getPlayerName.call({from: window.web3account});
   });
 };
 
 window.TicTacCryptoeGame.prototype.newPlayer = function(playerName) {
   return MovesRegister.deployed().then((instance) => {
-    return instance.newPlayer(playerName, {from: account});
+    return instance.newPlayer(playerName, {from: window.web3account});
   });
 };
 
