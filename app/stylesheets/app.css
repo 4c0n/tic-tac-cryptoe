@@ -150,3 +150,40 @@
   font-family: 'Architects Daughter', bold;
   color: #ff0000;
 }
+
+.loading-overlay {
+  background-color: #000000;
+  opacity: 0.4;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 3;
+}
+
+@keyframes logo-fade {
+  from {opacity: 0.25;}
+}
+
+.loader-logo {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  animation: logo-fade 1s infinite alternate;
+}
+
+.loader-logo img {
+  z-index: 50;
+  filter: drop-shadow(0px -30px 60px #FFFFFF);
+}
+
+.loader-text {
+  font-family: 'Architects Daughter', bold;
+  font-size: 1.8em;
+  color: #ffffff;
+  opacity: 0.6;
+  text-align: center;
+}
