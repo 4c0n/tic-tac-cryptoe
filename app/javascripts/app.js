@@ -17,6 +17,17 @@ window.TicTacCryptoe = {
 
   _registerDialogHandlers: function() {
     $('.player-registration-dialog-button').click((event) => {
+      this._game.listenForNewPlayerEvent((error, result) => {
+        if (!error) {
+          console.log('NewPlayer event received: ', result);
+          // TODO: check if this event was send from our account
+          this._initPlayerInfoAndGameBoard();
+        } else {
+          // TODO: properly handle this error
+          console.error(error);
+        }
+      });
+
       this._game.newPlayer($('#player-registration-dialog-input').val()).then(function() {
         $('.player-registration-dialog').hide();
       }).catch(function(e) {
@@ -35,6 +46,8 @@ window.TicTacCryptoe = {
     $('.player-info').show();
     $('.player-info').css("opacity", 1);
     $('.player-name-text').html(playerName);
+    // TODO: init win count
+    // TODO: init loss count
   },
 
   _initPlayerInfo: function(playerName = null) {
