@@ -29,6 +29,13 @@ window.TicTacCryptoeGame.prototype.newPlayer = function(playerName) {
   });
 };
 
+window.TicTacCryptoeGame.prototype.listenForNewPlayerEvent = function(callback) {
+  MovesRegister.deployed().then((instance) => {
+    let newPlayerEvent = instance.NewPlayer({});
+    newPlayerEvent.watch(callback);
+  });
+};
+
 window.TicTacCryptoeGame.prototype.isItMyTurn = function() {
   return false;
 };
