@@ -31,7 +31,7 @@ contract GameRegister is PlayerRegister {
   }
 
   function newGame() public {
-    requirePlayerExist();
+    requirePlayerExists();
     requirePlayerIsNotAlreadyPlaying();
 
     uint playerId = getPlayerIndex();
