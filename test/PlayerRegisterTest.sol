@@ -15,6 +15,11 @@ contract PlayerRegisterProxy {
     PlayerRegister register = new PlayerRegister();
     register.getWinCount();
   }
+
+  function getLossCountWithoutRegistering() public {
+    PlayerRegister register = new PlayerRegister();
+    register.getLossCount();
+  }
 }
 
 contract PlayerRegisterTest {
@@ -83,6 +88,15 @@ contract PlayerRegisterTest {
       uint(register.getLossCount()),
       "Could not retrieve the correct win count"
     );
+  }
+
+  function testCannotRetrieveLossCountIfNotRegistered() public {
+    PlayerRegisterProxy registerProxy = new PlayerRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+    PlayerRegisterProxy(address(throwProxy)).getLossCountWithoutRegistering();
+    bool r = throwProxy.execute();
+
+    Assert.isFalse(r, "Error was not produced!");
   }
 }
 
