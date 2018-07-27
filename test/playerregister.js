@@ -28,4 +28,42 @@ contract('PlayerRegister', function(accounts) {
       assert.equal(e.message, "VM Exception while processing transaction: revert");
     });
   });
+
+  it("should return the correct win count of the registered player", function() {
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getWinCount({from: accounts[0]});
+    }).then(function(winCount) {
+      assert.equal(winCount, 0);
+    });
+  });
+
+  it("should error if requesting the win count when not registered", function() {
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getWinCount({from: accounts[1]});
+    }).then(function() {
+      // The call should not be succesful
+      assert.equal(1, 2);
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
+  });
+
+  it("should return the correct loss count of the registered player", function() {
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getLossCount({from: accounts[0]});
+    }).then(function(lossCount) {
+      assert.equal(lossCount, 0);
+    });
+  });
+
+  it("should error if requesting the loss count when not registered", function() {
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getLossCount({from: accounts[1]});
+    }).then(function() {
+      // The call should not be successful
+      assert.equal(1, 2);
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
+  });
 });
