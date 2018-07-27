@@ -16,7 +16,12 @@ module.exports = {
     // Copy the ethereum logo to the build folder.
     new CopyWebpackPlugin([
       { from: './app/ETHEREUM-ICON_Black_small.png', to: "ETHEREUM-ICON_Black_small.png" }
-    ])
+    ]),
+
+    // Copy icon image to the build folder
+    new CopyWebpackPlugin([
+      { from: './app/Click-Play.png', to: 'Click-Play.png' }
+    ]),
   ],
   module: {
     rules: [
