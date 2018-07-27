@@ -17,7 +17,7 @@ contract PlayerRegister is Ownable {
 
   event NewPlayer(address indexed _from, string name);
 
-  function requirePlayerExist() internal view returns (bool) {
+  function requirePlayerExists() internal view returns (bool) {
     require(
       ownerToPlayer[msg.sender] != 0,
       "Account is not registered as a player!"
@@ -37,13 +37,26 @@ contract PlayerRegister is Ownable {
       ownerToPlayer[msg.sender] == 0,
       "Account is already registered as player!"
     );
+    // TODO: validate name
     uint id = players.push(Player(0, 0, name));
     ownerToPlayer[msg.sender] = id;
     emit NewPlayer(msg.sender, name);
   }
 
   function getPlayerName() public view returns (string) {
-    requirePlayerExist();
+    requirePlayerExists();
     return getPlayer().name;
+  }
+
+  // TODO: add tests for this function
+  function getWinCount() public view returns (uint16) {
+    requirePlayerExists();
+    return getPlayer().winCount;
+  }
+
+  // TODO: add tests for this function
+  function getLossCount() public view returns (uint16) {
+    requirePlayerExists();
+    return getPlayer().lossCount;
   }
 }
