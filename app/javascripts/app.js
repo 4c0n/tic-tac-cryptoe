@@ -17,11 +17,14 @@ window.TicTacCryptoe = {
 
   _registerDialogHandlers: function() {
     $('.player-registration-dialog-button').click((event) => {
+      this._hidePlayerRegistrationDialog();
+      this._showLoadingScreen();
       this._game.listenForNewPlayerEvent((error, result) => {
         if (!error) {
           console.log('NewPlayer event received: ', result, window.web3account);
           // check if this event was send from our account
           if (result.args._from === window.web3account) {
+            this._hideLoadingScreen();
             this._initPlayerInfoAndGameBoard();
           }
         } else {
@@ -30,13 +33,37 @@ window.TicTacCryptoe = {
         }
       });
 
-      this._game.newPlayer($('#player-registration-dialog-input').val()).then(function() {
-        $('.player-registration-dialog').hide();
-      }).catch(function(e) {
-        $('.player-registration-dialog-error').show();
+      let playerName = $('#player-registration-dialog-input').val();
+
+      this._game.newPlayer(playerName).then(() => {
+        this._hideLoadingScreen();
+      }).catch((e) => {
+        this._hideLoadingScreen();
+        this._showPlayerRegistrationDialog(true);
         console.error(e);
       });
     });
+  },
+
+  _showPlayerRegistrationDialog: function(error = false) {
+    this._registerDialogHandlers();
+    $('.player-registration-dialog').show();
+    if (error) {
+      $('.player-registration-dialog-error').show();
+    }
+  },
+
+  _hidePlayerRegistrationDialog() {
+    $('.player-registration-dialog').hide();
+  },
+
+  _showLoadingScreen: function() {
+    $('.loading-overlay').show();
+    $('.loading-overlay').fadeIn(1000);
+  },
+
+  _hideLoadingScreen: function() {
+    $('.loading-overlay').fadeOut(1000);
   },
 
   _initPlayerInfoAndGameBoard: function(playerName = null) {
@@ -121,6 +148,8 @@ window.TicTacCryptoe = {
 
 
   init: function() {
+    this._showLoadingScreen();
+
     // is a registered player?
     this._game = new TicTacCryptoeGame();
     let playerName;
@@ -128,20 +157,16 @@ window.TicTacCryptoe = {
     this.whoAmI().then((name) => {
       playerName = name;
       this._initPlayerInfoAndGameBoard();
+      this._hideLoadingScreen();
     }).catch((e) => {
       console.error(e);
       // show dialog
       this._showPlayerRegistrationDialog();
+      this._hideLoadingScreen();
    });
     //this._registerHandlers();
   },
 
-  _showPlayerRegistrationDialog: function() {
-    this._registerDialogHandlers();
-    $('.player-info').show();
-    $('.player-registration-dialog').show();
-    $('.game-board').show();
-  },
 
   isItMyTurn: function() {
     return this._game.isItMyTurn();
