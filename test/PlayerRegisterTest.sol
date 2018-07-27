@@ -74,5 +74,15 @@ contract PlayerRegisterTest {
 
     Assert.isFalse(r, "Error was not produced!");
   }
+
+  function testCanRetrieveLossCountAfterRegistration() public {
+    PlayerRegister register = new PlayerRegister();
+    register.newPlayer("player0");
+    Assert.equal(
+      uint(0),
+      uint(register.getLossCount()),
+      "Could not retrieve the correct win count"
+    );
+  }
 }
 
