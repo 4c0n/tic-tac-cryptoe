@@ -36,6 +36,18 @@ window.TicTacCryptoeGame.prototype.listenForNewPlayerEvent = function(callback) 
   });
 };
 
+window.TicTacCryptoeGame.prototype.getWinCount = function() {
+  return MovesRegister.deployed().then((instance) => {
+    return instance.getWinCount({from: window.web3account});
+  });
+};
+
+window.TicTacCryptoeGame.prototype.getLossCount = function() {
+  return MovesRegister.deployed().then((instance) => {
+    return instance.getLossCount({from: window.web3account});
+  });
+};
+
 window.TicTacCryptoeGame.prototype.isItMyTurn = function() {
   return false;
 };
