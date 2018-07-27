@@ -25,7 +25,9 @@ window.TicTacCryptoe = {
           // check if this event was send from our account
           if (result.args._from === window.web3account) {
             this._hideLoadingScreen();
-            this._initPlayerInfoAndGameBoard();
+            this._initPlayerInfo();
+            this._registerNewGamePaneHandlers();
+            this._showNewGamePane();
           }
         } else {
           // TODO: properly handle this error
@@ -36,12 +38,20 @@ window.TicTacCryptoe = {
       let playerName = $('#player-registration-dialog-input').val();
 
       this._game.newPlayer(playerName).then(() => {
-        this._hideLoadingScreen();
+
       }).catch((e) => {
         this._hideLoadingScreen();
         this._showPlayerRegistrationDialog(true);
         console.error(e);
       });
+    });
+  },
+
+  _registerNewGamePaneHandlers: function() {
+    $('#new-game-button').click((event) => {
+      console.log('NEW GAME');
+      this._showLoadingScreen();
+      this._hideNewGamePane();
     });
   },
 
@@ -58,12 +68,24 @@ window.TicTacCryptoe = {
   },
 
   _showLoadingScreen: function() {
-    $('.loading-overlay').show();
-    $('.loading-overlay').fadeIn(1000);
+    let screen = $('.loading-overlay');
+    screen.show();
+    screen.fadeIn(1000);
   },
 
   _hideLoadingScreen: function() {
     $('.loading-overlay').fadeOut(1000);
+  },
+
+  _showNewGamePane: function() {
+    let pane = $('.new-game-pane');
+    pane.show();
+    pane.fadeIn(1000);
+  },
+
+  _hideNewGamePane: function() {
+    let pane = $('.new-game-pane');
+    pane.fadeOut(1000);
   },
 
   _initPlayerInfoAndGameBoard: function(playerName = null) {
@@ -72,8 +94,9 @@ window.TicTacCryptoe = {
   },
 
   __initPlayerInfo: function(playerName) {
-    $('.player-info').show();
-    $('.player-info').css("opacity", 1);
+    let playerInfo = $('.player-info');
+    playerInfo.show();
+    playerInfo.css("opacity", 1);
     $('.player-name-text').html(playerName);
     // TODO: init win count
     // TODO: init loss count
@@ -93,8 +116,9 @@ window.TicTacCryptoe = {
   },
 
   _initGameBoard: function() {
-    $('.game-board').show();
-    $('.game-board').css("opacity", 1);
+    let gameBoard = $('.game-board');
+    gameBoard.show();
+    gameBoard.css("opacity", 1);
   },
 
   _cellClickHandler: function(cellElement) {
