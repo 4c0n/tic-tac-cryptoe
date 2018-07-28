@@ -62,9 +62,22 @@ contract GameRegisterTest {
   function testReturnsCorrectStatusWhenNoGameHasBeenStarted() public {
     GameRegister register = new GameRegister();
     register.newPlayer("player0");
+
     Assert.equal(
       register.getGamePlayingStatus(),
       "not_started",
+      "The wrong game playing status was returned!"
+    );
+  }
+
+  function testReturnsCorrectStatusWhenTheGameIsQueued() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    register.newGame();
+
+    Assert.equal(
+      register.getGamePlayingStatus(),
+      "queued",
       "The wrong game playing status was returned!"
     );
   }
