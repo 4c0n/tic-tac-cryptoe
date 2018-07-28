@@ -93,26 +93,40 @@ window.TicTacCryptoe = {
     this._initGameBoard();
   },
 
-  __initPlayerInfo: function(playerName) {
+  __initPlayerInfo: function(playerName, winCount, lossCount) {
     let playerInfo = $('.player-info');
     playerInfo.show();
     playerInfo.css("opacity", 1);
     $('.player-name-text').html(playerName);
-    // TODO: init win count
-    // TODO: init loss count
+    $('.player-wincount-text').html(winCount);
+    $('.player-losscount-text').html(lossCount);
   },
 
   _initPlayerInfo: function(playerName = null) {
     if (playerName === null) {
       this.whoAmI().then((name) => {
-        this.__initPlayerInfo(name);
+        playerName = name;
       }).catch(function(e) {
         console.error(e);
         // TODO properly handle this error
       });
-    } else {
-      this.__initPlayerInfo(playerName);
     }
+
+    let winCount;
+    this._game.getWinCount().then((count) => {
+      winCount = count.toString();
+    }).catch((e) => {
+      console.error(e);
+      // TODO: implement better error handling
+    });
+
+    let lossCount;
+    this._game.getLossCount().then((count) => {
+      lossCount = count.toString();
+      this.__initPlayerInfo(playerName, winCount, lossCount);
+    }).catch((e) => {
+      console.error(e);
+    });
   },
 
   _initGameBoard: function() {
@@ -188,7 +202,6 @@ window.TicTacCryptoe = {
       this._showPlayerRegistrationDialog();
       this._hideLoadingScreen();
    });
-    //this._registerHandlers();
   },
 
 
