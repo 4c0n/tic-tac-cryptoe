@@ -5,6 +5,13 @@ import "truffle/DeployedAddresses.sol";
 import "./ThrowProxy.sol";
 import "../contracts/GameRegister.sol";
 
+contract GameRegisterProxy {
+  function getGamePlayingStatusWithoutRegistering() public {
+    GameRegister register = new GameRegister();
+    register.getGamePlayingStatus();
+  }
+}
+
 contract GameRegisterTest {
   function testCanStartNewGame() public {
     GameRegister register = new GameRegister();
@@ -80,6 +87,36 @@ contract GameRegisterTest {
       "queued",
       "The wrong game playing status was returned!"
     );
+  }
+
+  function testReturnsCorrectStatusWhenPlayingTheGame() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    register.newGame();
+
+    ThrowProxy proxy = new ThrowProxy(address(register));
+    GameRegister(address(proxy)).newPlayer("player1");
+    bool r1 = proxy.execute.gas(200000)();
+    Assert.isTrue(r1, "r1 was supposed to be true");
+
+    GameRegister(address(proxy)).newGame();
+    bool r2 = proxy.execute.gas(200000)();
+    Assert.isTrue(r2, "r2 was supposed to be true");
+
+    Assert.equal(
+      register.getGamePlayingStatus(),
+      "playing",
+      "The wrong status was returned"
+    );
+  }
+
+  function testCannotReturnStatusWhenThePlayerIsNotRegistered() public {
+    GameRegisterProxy register = new GameRegisterProxy();
+    ThrowProxy proxy = new ThrowProxy(address(register));
+    GameRegisterProxy(address(proxy)).getGamePlayingStatusWithoutRegistering();
+    bool r = proxy.execute();
+
+    Assert.isFalse(r, "No error was produced!");
   }
 }
 
