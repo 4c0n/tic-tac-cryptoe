@@ -58,5 +58,15 @@ contract GameRegisterTest {
       "There should only be 1 game!"
     );
   }
+
+  function testReturnsCorrectStatusWhenNoGameHasBeenStarted() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    Assert.equal(
+      register.getGamePlayingStatus(),
+      "not_started",
+      "The wrong game playing status was returned!"
+    );
+  }
 }
 
