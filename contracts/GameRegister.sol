@@ -37,7 +37,7 @@ contract GameRegister is PlayerRegister {
     uint gameId = playerToGame[playerId];
     if (gameId != 0) {
       // a game was started
-      if (waitingForOpponent && getGameIndexThatIsWaiting() == gameId) {
+      if (waitingForOpponent && getGameIndexThatIsWaiting() == gameId - 1) {
         return "queued";
       }
       return "playing";
