@@ -48,13 +48,11 @@ contract PlayerRegister is Ownable {
     return getPlayer().name;
   }
 
-  // TODO: add tests for this function
   function getWinCount() public view returns (uint16) {
     requirePlayerExists();
     return getPlayer().winCount;
   }
 
-  // TODO: add tests for this function
   function getLossCount() public view returns (uint16) {
     requirePlayerExists();
     return getPlayer().lossCount;
