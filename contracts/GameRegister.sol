@@ -30,6 +30,21 @@ contract GameRegister is PlayerRegister {
     return games.length - 1;
   }
 
+  // TODO add tests for this function
+  function getGamePlayingStatus() public view returns (string) {
+    requirePlayerExists();
+    uint playerId = getPlayerIndex();
+    uint gameId = playerToGame[playerId];
+    if (gameId != 0) {
+      // a game was started
+      if (waitingForOpponent && getGameIndexThatIsWaiting() == gameId) {
+        return "queued";
+      }
+      return "playing";
+    }
+    return "not_started";
+  }
+
   function newGame() public {
     requirePlayerExists();
     requirePlayerIsNotAlreadyPlaying();
