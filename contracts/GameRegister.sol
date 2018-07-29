@@ -30,7 +30,6 @@ contract GameRegister is PlayerRegister {
     return games.length - 1;
   }
 
-  // TODO add tests for this function
   function getGamePlayingStatus() public view returns (string) {
     requirePlayerExists();
     uint playerId = getPlayerIndex();
