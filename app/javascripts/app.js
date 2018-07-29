@@ -26,8 +26,7 @@ window.TicTacCryptoe = {
           if (result.args._from === window.web3account) {
             this._hideLoadingScreen();
             this._initPlayerInfo();
-            this._registerNewGamePaneHandlers();
-            this._showNewGamePane();
+            this._initNewGamePane();
           }
         } else {
           // TODO: properly handle this error
@@ -49,9 +48,19 @@ window.TicTacCryptoe = {
 
   _registerNewGamePaneHandlers: function() {
     $('#new-game-button').click((event) => {
-      console.log('NEW GAME');
+      // TODO: listen for QueuedGame event
+
       this._showLoadingScreen();
       this._hideNewGamePane();
+      this._game.newGame().then(() => {
+        // TODO: get opponent info and display it somewhere
+        // init game board
+        this._initGameBoard();
+        // hide loading screen
+      }).catch((e) => {
+        // TODO: handle this error
+        console.error(e);
+      });
     });
   },
 
@@ -63,7 +72,7 @@ window.TicTacCryptoe = {
     }
   },
 
-  _hidePlayerRegistrationDialog() {
+  _hidePlayerRegistrationDialog: function() {
     $('.player-registration-dialog').hide();
   },
 
@@ -106,7 +115,7 @@ window.TicTacCryptoe = {
     if (playerName === null) {
       this.whoAmI().then((name) => {
         playerName = name;
-      }).catch(function(e) {
+      }).catch((e) => {
         console.error(e);
         // TODO properly handle this error
       });
@@ -127,6 +136,11 @@ window.TicTacCryptoe = {
     }).catch((e) => {
       console.error(e);
     });
+  },
+
+  _initNewGamePane: function() {
+    this._registerNewGamePaneHandlers();
+    this._showNewGamePane();
   },
 
   _initGameBoard: function() {
@@ -192,11 +206,24 @@ window.TicTacCryptoe = {
     this._game = new TicTacCryptoeGame();
     let playerName;
 
-    this.whoAmI().then((name) => {
+    this.whoAmI().then((name) => { // Is registered
       playerName = name;
-      this._initPlayerInfoAndGameBoard();
-      this._hideLoadingScreen();
-    }).catch((e) => {
+      this._initPlayerInfo();
+      this._game.getGamePlayingStatus().then((status) => {
+        console.log(status);
+        if (status === 'not_started') {
+          this._initNewGamePane();
+        } else if (status === 'queued') {
+          // TODO: show some screen
+        } else if (status === 'playing') {
+          // TODO: init game board
+        }
+        this._hideLoadingScreen();
+      }).catch((e) => {
+        console.error(e);
+        // TODO: handle this error
+      });
+    }).catch((e) => { // Is most likely not registered
       console.error(e);
       // show dialog
       this._showPlayerRegistrationDialog();
