@@ -11,7 +11,7 @@ contract("GameRegister", function(accounts) {
       return register.newGame({from: accounts[0]});
     }).then(function(tx) {
       assert.equal(tx.logs[0].event, "QueuedGame");
-      assert.equal(tx.logs[0].args._from, 0);
+      assert.equal(tx.logs[0].args._from, accounts[0]);
     });
   });
 

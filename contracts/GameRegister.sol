@@ -16,7 +16,7 @@ contract GameRegister is PlayerRegister {
   mapping (uint => uint) playerToGame;
   mapping (uint => uint) gameToPlayerThatStarted;
     
-  event QueuedGame(uint indexed _from, uint id);
+  event QueuedGame(address indexed _from, uint id);
   event StartGame(uint indexed _from, uint indexed _to);
     
   function requirePlayerIsNotAlreadyPlaying() private view {
@@ -62,7 +62,7 @@ contract GameRegister is PlayerRegister {
       playerToGame[playerId] = gameId;
       gameToPlayerThatStarted[gameId - 1] = playerId;
       waitingForOpponent = true;
-      emit QueuedGame(playerId, gameId);
+      emit QueuedGame(msg.sender, gameId);
     }
   }
 
