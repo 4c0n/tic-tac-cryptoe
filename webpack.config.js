@@ -22,6 +22,11 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './app/Click-Play.png', to: 'Click-Play.png' }
     ]),
+
+    // Copy gif animation to the build folder
+    new CopyWebpackPlugin([
+     { from: './app/tictactoe-robot.gif', to: 'tictactoe-robot.gif' }
+    ]),
   ],
   module: {
     rules: [
