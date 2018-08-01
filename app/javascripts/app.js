@@ -49,14 +49,21 @@ window.TicTacCryptoe = {
   _registerNewGamePaneHandlers: function() {
     $('#new-game-button').click((event) => {
       // TODO: listen for QueuedGame event
+      this._game.listenForQueuedGameEvent((error, result) => {
+        if (!error) {
+          if (result.args._from === window.web3account) {
+            this._initQueuedGamePane();
+            this._hideLoadingScreen();
+          };
+        } else {
+          // TODO: handle this error
+          console.log(error);
+        }
+      });
 
       this._showLoadingScreen();
       this._hideNewGamePane();
       this._game.newGame().then(() => {
-        // TODO: get opponent info and display it somewhere
-        // init game board
-        this._initGameBoard();
-        // hide loading screen
       }).catch((e) => {
         // TODO: handle this error
         console.error(e);
@@ -94,6 +101,17 @@ window.TicTacCryptoe = {
 
   _hideNewGamePane: function() {
     let pane = $('.new-game-pane');
+    pane.fadeOut(1000);
+  },
+
+  _showQueuedGamePane: function() {
+    let pane = $('.queued-game-pane');
+    pane.show();
+    pane.fadeIn(1000);
+  },
+
+  _hideQueuedGamePane: function() {
+    let pane = $('.queued-game-pane');
     pane.fadeOut(1000);
   },
 
@@ -141,6 +159,10 @@ window.TicTacCryptoe = {
   _initNewGamePane: function() {
     this._registerNewGamePaneHandlers();
     this._showNewGamePane();
+  },
+
+  _initQueuedGamePane: function() {
+    this._showQueuedGamePane();
   },
 
   _initGameBoard: function() {
@@ -214,7 +236,8 @@ window.TicTacCryptoe = {
         if (status === 'not_started') {
           this._initNewGamePane();
         } else if (status === 'queued') {
-          // TODO: show some screen
+          // show some screen
+          this._initQueuedGamePane();
         } else if (status === 'playing') {
           // TODO: init game board
         }
