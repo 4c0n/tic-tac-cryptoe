@@ -17,7 +17,7 @@ contract GameRegister is PlayerRegister {
   mapping (uint => uint) gameToPlayerThatStarted;
     
   event QueuedGame(address indexed _from, uint id);
-  event StartGame(uint indexed _from, uint indexed _to);
+  event StartGame(address indexed _from, uint indexed _to);
     
   function requirePlayerIsNotAlreadyPlaying() private view {
     require(
@@ -56,7 +56,7 @@ contract GameRegister is PlayerRegister {
       playerToGame[playerId] = gameId + 1;
       waitingForOpponent = false;
       uint opponentId = gameToPlayerThatStarted[gameId];
-      emit StartGame(playerId, opponentId);
+      emit StartGame(msg.sender, opponentId);
     } else {
       gameId = games.push(Game(0));
       playerToGame[playerId] = gameId;
