@@ -67,6 +67,13 @@ window.TicTacCryptoeGame.prototype.listenForQueuedGameEvent = function(callback)
   });
 };
 
+window.TicTacCryptoeGame.prototype.listenForStartGameEvent = function(callback) {
+  return MovesRegister.deployed().then((instance) => {
+    let startGameEvent = instance.StartGame({});
+    startGameEvent.watch(callback);
+  });
+};
+
 window.TicTacCryptoeGame.prototype.isItMyTurn = function() {
   return false;
 };
