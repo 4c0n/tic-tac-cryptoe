@@ -48,13 +48,29 @@ window.TicTacCryptoe = {
 
   _registerNewGamePaneHandlers: function() {
     $('#new-game-button').click((event) => {
-      // TODO: listen for QueuedGame event
+      // listen for QueuedGame event
       this._game.listenForQueuedGameEvent((error, result) => {
         if (!error) {
+          console.log('QueuedGame event received: ', result, window.web3account);
           if (result.args._from === window.web3account) {
             this._initQueuedGamePane();
             this._hideLoadingScreen();
           };
+        } else {
+          // TODO: handle this error
+          console.log(error);
+        }
+      });
+
+      this._game.listenForStartGameEvent((error, result) => {
+        if (!error) {
+          // TODO: add conditions and only handle the event if it is meant for the current account
+          console.log('StartGame event received: ', result, window.web3account);
+          this._hideQueuedGamePane();
+          this._showLoadingScreen();
+          // TODO: init the opponent info
+          // TODO: init the game board
+          this._hideLoadingScreen();
         } else {
           // TODO: handle this error
           console.log(error);
