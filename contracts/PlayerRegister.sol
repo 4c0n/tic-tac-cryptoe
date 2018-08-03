@@ -19,10 +19,7 @@ contract PlayerRegister is Ownable {
 
   // TODO: try to convert to modifier
   function requirePlayerExists() internal view {
-    require(
-      ownerToPlayer[msg.sender] != 0,
-      "Account is not registered as a player!"
-    );
+    requirePlayerExists(msg.sender);
   }
 
   // TODO: try to convert to  modifier
@@ -31,10 +28,6 @@ contract PlayerRegister is Ownable {
       ownerToPlayer[account] != 0,
       "Account is not registered as a player!"
     );
-  }
-
-  function getPlayer() private view returns (Player) {
-    return players[getPlayerIndex()];
   }
 
   function getPlayerIndex() internal view returns (uint) {
@@ -53,22 +46,30 @@ contract PlayerRegister is Ownable {
   }
 
   function getPlayerName() public view returns (string) {
-    requirePlayerExists();
-    return getPlayer().name;
+    return getPlayerNameByAddress(msg.sender);
   }
 
+  // TODO: convert to overloaded function when truffle-contract/web3 can handle that correctly
   function getPlayerNameByAddress(address account) public view returns (string) {
     requirePlayerExists(account);
     return players[ownerToPlayer[account] - 1].name;
   }
 
   function getWinCount() public view returns (uint16) {
-    requirePlayerExists();
-    return getPlayer().winCount;
+    return getWinCountByAddress(msg.sender);
+  }
+
+  function getWinCountByAddress(address account) public view returns (uint16) {
+    requirePlayerExists(account);
+    return players[ownerToPlayer[account] - 1].winCount;
   }
 
   function getLossCount() public view returns (uint16) {
-    requirePlayerExists();
-    return getPlayer().lossCount;
+    return getLossCountByAddress(msg.sender);
+  }
+
+  function getLossCountByAddress(address account) public view returns (uint16) {
+    requirePlayerExists(account);
+    return players[ownerToPlayer[account] - 1].lossCount;
   }
 }
