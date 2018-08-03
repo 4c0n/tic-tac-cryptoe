@@ -66,11 +66,13 @@ window.TicTacCryptoe = {
         if (!error) {
           // TODO: add conditions and only handle the event if it is meant for the current account
           console.log('StartGame event received: ', result, window.web3account);
-          this._hideQueuedGamePane();
-          this._showLoadingScreen();
-          // TODO: init the opponent info
-          // TODO: init the game board
-          this._hideLoadingScreen();
+          if (result.args._to === window.web3account) {
+            this._hideQueuedGamePane();
+            this._showLoadingScreen();
+            // TODO: init the opponent info
+            // TODO: init the game board
+            this._hideLoadingScreen();
+          }
         } else {
           // TODO: handle this error
           console.log(error);
@@ -80,6 +82,7 @@ window.TicTacCryptoe = {
       this._showLoadingScreen();
       this._hideNewGamePane();
       this._game.newGame().then(() => {
+        // Wait for event
       }).catch((e) => {
         // TODO: handle this error
         console.error(e);
