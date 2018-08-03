@@ -20,9 +20,10 @@ window.TicTacCryptoe = {
       this._hidePlayerRegistrationDialog();
       this._showLoadingScreen();
       this._game.listenForNewPlayerEvent((error, result) => {
+        console.log('NewPlayer event received: ', result, window.web3account);
+
         if (!error) {
-          console.log('NewPlayer event received: ', result, window.web3account);
-          // check if this event was send from our account
+         // check if this event was send from our account
           if (result.args._from === window.web3account) {
             this._hideLoadingScreen();
             this._initPlayerInfo();
@@ -69,7 +70,8 @@ window.TicTacCryptoe = {
           if (result.args._to === window.web3account) {
             this._hideQueuedGamePane();
             this._showLoadingScreen();
-            // TODO: init the opponent info
+            // init the opponent info
+            this._initOpponentInfo(result.args._from);
             // TODO: init the game board
             this._hideLoadingScreen();
           }
@@ -150,7 +152,7 @@ window.TicTacCryptoe = {
 
   _initPlayerInfo: function(playerName = null) {
     if (playerName === null) {
-      this.whoAmI().then((name) => {
+      this._game.getPlayerName().then((name) => {
         playerName = name;
       }).catch((e) => {
         console.error(e);
@@ -182,6 +184,10 @@ window.TicTacCryptoe = {
 
   _initQueuedGamePane: function() {
     this._showQueuedGamePane();
+  },
+
+  _initOpponentInfo: function(address) {
+    // TODO: get opponent info
   },
 
   _initGameBoard: function() {
@@ -247,7 +253,7 @@ window.TicTacCryptoe = {
     this._game = new TicTacCryptoeGame();
     let playerName;
 
-    this.whoAmI().then((name) => { // Is registered
+    this._game.getPlayerName().then((name) => { // Is registered
       playerName = name;
       this._initPlayerInfo();
       this._game.getGamePlayingStatus().then((status) => {
@@ -291,10 +297,6 @@ window.TicTacCryptoe = {
     } else {
       $(selector).text('X');
     }
-  },
-
-  whoAmI: function() {
-    return this._game.whoAmI();
   },
 
   iAmAWinner: function(playerId) {
