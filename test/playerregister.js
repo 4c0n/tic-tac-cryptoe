@@ -18,8 +18,12 @@ contract('PlayerRegister', function(accounts) {
     });
   });
 
-  it("should be ale to return the player name using a specific address", function() {
-    assert.equal(false, true);
+  it("should be able to return the player name using a specific address", function() {
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getPlayerNameByAddress(accounts[0], {from: accounts[0]});
+    }).then(function(name) {
+      assert.equal(name, "player0");
+    });
   });
 
   it("should error when requesting the name when not registered", function() {
