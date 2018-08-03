@@ -18,6 +18,10 @@ contract('PlayerRegister', function(accounts) {
     });
   });
 
+  it("should be ale to return the player name using a specific address", function() {
+    assert.equal(false, true);
+  });
+
   it("should error when requesting the name when not registered", function() {
     return PlayerRegister.deployed().then(function(instance) {
       return instance.getPlayerName({from: accounts[1]});
@@ -27,6 +31,10 @@ contract('PlayerRegister', function(accounts) {
     }).catch(function(e) {
       assert.equal(e.message, "VM Exception while processing transaction: revert");
     });
+  });
+
+  it("should error when requesting the name of an address that has not registered", function() {
+    assert.equal(false, true);
   });
 
   it("should return the correct win count of the registered player", function() {
