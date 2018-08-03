@@ -1,6 +1,6 @@
 .game-board {
-  width: 600px;
-  height: 600px;
+  max-width: 600px;
+  max-height: 700px;
   display: none;
   position: relative;
   z-index: -1;
@@ -65,6 +65,7 @@
   z-index: -1;
   position: relative;
 }
+
 .player-name-label-text {
   font-family: 'Architects Daughter', cursive;
   font-size: 1.5em;
@@ -239,4 +240,22 @@
 
 .queued-game-pane img {
   margin-top: 50px;
+}
+
+.opponent-info {
+  display: none;
+  opacity: 0.2;
+  z-index: -1;
+  position: relative;
+}
+
+.opponent-info p {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.5em;
+}
+
+.opponent-info-row {
+  border-top-style: solid;
+  vertical-align: middle;
+  margin-bottom: 25px;
 }
