@@ -52,6 +52,10 @@ contract PlayerRegisterTest {
     );
   }
 
+  function testOthersCanRetrievePlayerNameAfterRegistration() public {
+    Assert.isTrue(false, "TODO");
+  }
+
   function testCannotRetrievePlayerNameIfNotRegistered() public {
     PlayerRegisterProxy registerProxy = new PlayerRegisterProxy();
     ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
@@ -59,6 +63,10 @@ contract PlayerRegisterTest {
     bool r = throwProxy.execute();
 
     Assert.isFalse(r, "Error was not produced!");
+  }
+
+  function testOthersCannotRetrievePlayerNameIfNotRegistered() public {
+    Assert.isTrue(false, "TODO");
   }
 
   function testCanRetrieveWinCountAfterRegistration() public {
