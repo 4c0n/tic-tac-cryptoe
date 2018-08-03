@@ -57,7 +57,7 @@ contract PlayerRegister is Ownable {
     return getPlayer().name;
   }
 
-  function getPlayerName(address account) public view returns (string) {
+  function getPlayerNameByAddress(address account) public view returns (string) {
     requirePlayerExists(account);
     return players[ownerToPlayer[account] - 1].name;
   }

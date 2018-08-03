@@ -13,7 +13,7 @@ contract PlayerRegisterProxy {
 
   function getNameUsingSpecificAddressWithoutRegistering() public {
     PlayerRegister register = new PlayerRegister();
-    register.getPlayerName(address(this));
+    register.getPlayerNameByAddress(address(this));
   }
 
   function getWinCountWithoutRegistering() public {
@@ -63,7 +63,7 @@ contract PlayerRegisterTest {
 
     Assert.equal(
       "player0",
-      string(register.getPlayerName(address(this))),
+      string(register.getPlayerNameByAddress(address(this))),
       "Could not retrieve player name using specific address!"
     );
   }
