@@ -17,9 +17,18 @@ contract PlayerRegister is Ownable {
 
   event NewPlayer(address indexed _from, string name);
 
-  function requirePlayerExists() internal view returns (bool) {
+  // TODO: try to convert to modifier
+  function requirePlayerExists() internal view {
     require(
       ownerToPlayer[msg.sender] != 0,
+      "Account is not registered as a player!"
+    );
+  }
+
+  // TODO: try to convert to  modifier
+  function requirePlayerExists(address account) internal view {
+    require(
+      ownerToPlayer[account] != 0,
       "Account is not registered as a player!"
     );
   }
@@ -46,6 +55,11 @@ contract PlayerRegister is Ownable {
   function getPlayerName() public view returns (string) {
     requirePlayerExists();
     return getPlayer().name;
+  }
+
+  function getPlayerName(address account) public view returns (string) {
+    requirePlayerExists(account);
+    return players[ownerToPlayer[account] - 1].name;
   }
 
   function getWinCount() public view returns (uint16) {
