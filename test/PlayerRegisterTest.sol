@@ -11,6 +11,11 @@ contract PlayerRegisterProxy {
     register.getPlayerName();
   }
 
+  function getNameUsingSpecificAddressWithoutRegistering() public {
+    PlayerRegister register = new PlayerRegister();
+    register.getPlayerName(address(this));
+  }
+
   function getWinCountWithoutRegistering() public {
     PlayerRegister register = new PlayerRegister();
     register.getWinCount();
@@ -73,7 +78,12 @@ contract PlayerRegisterTest {
   }
 
   function testOthersCannotRetrievePlayerNameIfNotRegistered() public {
-    Assert.isTrue(false, "TODO");
+    PlayerRegisterProxy registerProxy = new PlayerRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+    PlayerRegisterProxy(address(throwProxy)).getNameUsingSpecificAddressWithoutRegistering();
+    bool r = throwProxy.execute();
+
+    Assert.isFalse(r, "Error was not produced!");
   }
 
   function testCanRetrieveWinCountAfterRegistration() public {
