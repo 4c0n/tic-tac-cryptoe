@@ -68,7 +68,7 @@ contract('PlayerRegister', function(accounts) {
     return PlayerRegister.deployed().then(function(instance) {
       return instance.getWinCount({from: accounts[1]});
     }).then(function() {
-      // The call should not be succesful
+      // The call should not be successful
       assert.equal(1, 2);
     }).catch(function(e) {
       assert.equal(e.message, "VM Exception while processing transaction: revert");
@@ -76,7 +76,14 @@ contract('PlayerRegister', function(accounts) {
   });
 
   it("should error if requesting the win count of a specific player that did not register", function() {
-    assert.equal(false, true);
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getWinCountByAddress(accounts[5], {from: accounts[0]});
+    }).then(function() {
+      // The call should not be successful
+      assert.fail("success", "fail", "The call was not supposed to be successfull!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
   });
 
   it("should return the correct loss count of the registered player", function() {
@@ -87,7 +94,7 @@ contract('PlayerRegister', function(accounts) {
     });
   });
 
-  it("should return the correct loss count of the player who's address was specified", function() {
+  it.skip("should return the correct loss count of the player who's address was specified", function() {
     assert.equal(false, true);
   });
 
@@ -102,7 +109,7 @@ contract('PlayerRegister', function(accounts) {
     });
   });
 
-  it("should error if requesting the loss count of a specific player that did not register", function() {
+  it.skip("should error if requesting the loss count of a specific player that did not register", function() {
     assert.equal(false, true);
   });
 });
