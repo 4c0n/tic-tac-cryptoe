@@ -17,9 +17,12 @@ window.TicTacCryptoeGame = function() {
   });
 }
 
-window.TicTacCryptoeGame.prototype.whoAmI = function() {
+window.TicTacCryptoeGame.prototype.getPlayerName = function(address = null) {
   return MovesRegister.deployed().then(function(instance) {
-    return instance.getPlayerName.call({from: window.web3account});
+    if (address === null) {
+      return instance.getPlayerName();
+    }
+    return instance.getPlayerNameByAddress(address);
   });
 };
 
