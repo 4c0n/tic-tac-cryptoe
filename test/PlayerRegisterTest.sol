@@ -21,9 +21,19 @@ contract PlayerRegisterProxy {
     register.getWinCount();
   }
 
+  function getWinCountByAddressWithoutRegistering() public {
+    PlayerRegister register = new PlayerRegister();
+    register.getWinCountByAddress(address(this));
+  }
+
   function getLossCountWithoutRegistering() public {
     PlayerRegister register = new PlayerRegister();
     register.getLossCount();
+  }
+
+  function getLossCountByAddressWithoutRegistering() public {
+    PlayerRegister register = new PlayerRegister();
+    register.getLossCountByAddress(address(this));
   }
 }
 
@@ -96,10 +106,29 @@ contract PlayerRegisterTest {
     );
   }
 
+  function testOthersCanRetrieveWinCountAfterRegistration() public {
+    PlayerRegister register = new PlayerRegister();
+    register.newPlayer("player0");
+    Assert.equal(
+      uint(0),
+      uint(register.getWinCountByAddress(address(this))),
+      "Could not retrieve the correct win count"
+    );
+  }
+
   function testCannotRetrieveWinCountIfNotRegistered() public {
     PlayerRegisterProxy registerProxy = new PlayerRegisterProxy();
     ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
     PlayerRegisterProxy(address(throwProxy)).getWinCountWithoutRegistering();
+    bool r = throwProxy.execute();
+
+    Assert.isFalse(r, "Error was not produced!");
+  }
+
+  function testOthersCannotRetrieveWinCountIfNotRegistered() public {
+    PlayerRegisterProxy registerProxy = new PlayerRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+    PlayerRegisterProxy(address(throwProxy)).getWinCountByAddressWithoutRegistering();
     bool r = throwProxy.execute();
 
     Assert.isFalse(r, "Error was not produced!");
@@ -115,10 +144,29 @@ contract PlayerRegisterTest {
     );
   }
 
+  function testOthersCanRetrieveLossCountAfterRegistration() public {
+    PlayerRegister register = new PlayerRegister();
+    register.newPlayer("player0");
+    Assert.equal(
+      uint(0),
+      uint(register.getLossCountByAddress(address(this))),
+      "Could not retrieve the correct win count"
+    );
+  }
+
   function testCannotRetrieveLossCountIfNotRegistered() public {
     PlayerRegisterProxy registerProxy = new PlayerRegisterProxy();
     ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
     PlayerRegisterProxy(address(throwProxy)).getLossCountWithoutRegistering();
+    bool r = throwProxy.execute();
+
+    Assert.isFalse(r, "Error was not produced!");
+  }
+
+  function testOthersCannotRetrieveLossCountIfNotRegistered() public {
+    PlayerRegisterProxy registerProxy = new PlayerRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+    PlayerRegisterProxy(address(throwProxy)).getLossCountByAddressWithoutRegistering();
     bool r = throwProxy.execute();
 
     Assert.isFalse(r, "Error was not produced!");
