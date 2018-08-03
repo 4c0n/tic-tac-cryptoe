@@ -53,7 +53,14 @@ contract PlayerRegisterTest {
   }
 
   function testOthersCanRetrievePlayerNameAfterRegistration() public {
-    Assert.isTrue(false, "TODO");
+    PlayerRegister register = new PlayerRegister();
+    register.newPlayer("player0");
+
+    Assert.equal(
+      "player0",
+      string(register.getPlayerName(address(this))),
+      "Could not retrieve player name using specific address!"
+    );
   }
 
   function testCannotRetrievePlayerNameIfNotRegistered() public {
