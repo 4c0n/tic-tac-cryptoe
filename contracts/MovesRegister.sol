@@ -46,7 +46,7 @@ contract MovesRegister is GameRegister {
     // that started the game
     if (game.moveCount == 0) {
       require(
-        gameToPlayerThatStarted[gameId] == playerId,
+        gameToPlayerThatStarted[gameId] == msg.sender,
         "Only the player that started the game is allowed to make the first move!"
       );
     }

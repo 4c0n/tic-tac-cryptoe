@@ -14,10 +14,10 @@ contract GameRegister is PlayerRegister {
     
   // Game id is also off by +1 for the same reason
   mapping (uint => uint) playerToGame;
-  mapping (uint => uint) gameToPlayerThatStarted;
+  mapping (uint => address) gameToPlayerThatStarted;
     
   event QueuedGame(address indexed _from, uint id);
-  event StartGame(address indexed _from, uint indexed _to);
+  event StartGame(address indexed _from, address indexed _to);
     
   function requirePlayerIsNotAlreadyPlaying() private view {
     require(
@@ -55,12 +55,12 @@ contract GameRegister is PlayerRegister {
       gameId = getGameIndexThatIsWaiting();
       playerToGame[playerId] = gameId + 1;
       waitingForOpponent = false;
-      uint opponentId = gameToPlayerThatStarted[gameId];
-      emit StartGame(msg.sender, opponentId);
+      address opponentAddress = gameToPlayerThatStarted[gameId];
+      emit StartGame(msg.sender, opponentAddress);
     } else {
       gameId = games.push(Game(0));
       playerToGame[playerId] = gameId;
-      gameToPlayerThatStarted[gameId - 1] = playerId;
+      gameToPlayerThatStarted[gameId - 1] = msg.sender;
       waitingForOpponent = true;
       emit QueuedGame(msg.sender, gameId);
     }
