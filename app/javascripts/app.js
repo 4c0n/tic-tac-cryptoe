@@ -173,6 +173,7 @@ window.TicTacCryptoe = {
       lossCount = count.toString();
       this.__initPlayerInfo(playerName, winCount, lossCount);
     }).catch((e) => {
+      // TODO: handle this error
       console.error(e);
     });
   },
@@ -186,8 +187,37 @@ window.TicTacCryptoe = {
     this._showQueuedGamePane();
   },
 
+  __initOpponentInfo: function(playerName, winCount, lossCount) {
+    let opponentInfo = $('.opponent-info');
+    opponentInfo.show();
+    $('#opponent-info-name').html(playerName);
+    $('#opponent-info-wincount').html(winCount);
+    $('#oppenent-info-losscount').html(lossCount);
+  },
+
   _initOpponentInfo: function(address) {
-    // TODO: get opponent info
+    let playerName;
+    this._game.getPlayerName(address).then((name) => {
+      playerName = name;
+    }).catch((e) => {
+      // TODO: handle this error
+      console.error(e);
+    });
+
+    let winCount;
+    this._game.getWinCount(address).then((count) => {
+      winCount = count.toString();
+    }).catch((e) => {
+      // TODO: handle this error
+      console.error(e);
+    });
+
+    this._game.getLossCount(address).then((lossCount) => {
+      this.__initOpponentInfo(playerName, winCount, lossCount);
+    }).catch((e) => {
+      // TODO: handle this error
+      console.error(e);
+    });
   },
 
   _initGameBoard: function() {
@@ -264,6 +294,7 @@ window.TicTacCryptoe = {
           // show some screen
           this._initQueuedGamePane();
         } else if (status === 'playing') {
+          // TODO: init opponent info
           // TODO: init game board
         }
         this._hideLoadingScreen();
