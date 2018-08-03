@@ -113,7 +113,13 @@ contract('PlayerRegister', function(accounts) {
     });
   });
 
-  it.skip("should error if requesting the loss count of a specific player that did not register", function() {
-    assert.equal(false, true);
+  it("should error if requesting the loss count of a specific player that did not register", function() {
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getLossCountByAddress(accounts[5]);
+    }).then(function() {
+      assert.fail("success", "fail", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
   });
 });
