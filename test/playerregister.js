@@ -57,7 +57,11 @@ contract('PlayerRegister', function(accounts) {
   });
 
   it("should return the correct win count of the player who's address was specified", function() {
-    assert.equal(false, true);
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getWinCountByAddress(accounts[0], {from: accounts[0]});
+    }).then(function(winCount) {
+      assert.equal(winCount, 0);
+    });
   });
 
   it("should error if requesting the win count when not registered", function() {
