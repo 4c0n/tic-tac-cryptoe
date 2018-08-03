@@ -39,15 +39,21 @@ window.TicTacCryptoeGame.prototype.listenForNewPlayerEvent = function(callback) 
   });
 };
 
-window.TicTacCryptoeGame.prototype.getWinCount = function() {
+window.TicTacCryptoeGame.prototype.getWinCount = function(address = null) {
   return MovesRegister.deployed().then((instance) => {
-    return instance.getWinCount({from: window.web3account});
+    if (address === null) {
+      return instance.getWinCount({from: window.web3account});
+    }
+    return instance.getWinCountByAddress(address);
   });
 };
 
-window.TicTacCryptoeGame.prototype.getLossCount = function() {
+window.TicTacCryptoeGame.prototype.getLossCount = function(address = null) {
   return MovesRegister.deployed().then((instance) => {
-    return instance.getLossCount({from: window.web3account});
+    if (address === null) {
+      return instance.getLossCount({from: window.web3account});
+    }
+    return instance.getLossCountByAddress(address);
   });
 };
 
