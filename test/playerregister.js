@@ -38,7 +38,14 @@ contract('PlayerRegister', function(accounts) {
   });
 
   it("should error when requesting the name of an address that has not registered", function() {
-    assert.equal(false, true);
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getPlayerNameByAddress(accounts[5], {from: accounts[0]});
+    }).then(function() {
+      // The call should not be successful.
+      assert.equal(false, true);
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
   });
 
   it("should return the correct win count of the registered player", function() {
