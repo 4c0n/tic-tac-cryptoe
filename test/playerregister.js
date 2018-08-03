@@ -94,8 +94,12 @@ contract('PlayerRegister', function(accounts) {
     });
   });
 
-  it.skip("should return the correct loss count of the player who's address was specified", function() {
-    assert.equal(false, true);
+  it("should return the correct loss count of the player who's address was specified", function() {
+    return PlayerRegister.deployed().then(function(instance) {
+      return instance.getLossCountByAddress(accounts[0]);
+    }).then(function(lossCount) {
+      assert.equal(lossCount, 0);
+    });
   });
 
   it("should error if requesting the loss count when not registered", function() {
