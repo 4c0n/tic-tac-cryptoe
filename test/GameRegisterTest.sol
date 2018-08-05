@@ -35,7 +35,7 @@ contract GameRegisterTest {
     GameRegister register = new GameRegister();
     ThrowProxy throwProxy = new ThrowProxy(address(register));
     GameRegister(address(throwProxy)).newPlayer("player1");
-    bool r1 = throwProxy.execute.gas(2000000)();
+    bool r1 = throwProxy.execute.gas(200000)();
     Assert.isTrue(r1, "r1 was supposed to be true");
     GameRegister(address(throwProxy)).newGame();
     bool r2 = throwProxy.execute.gas(200000)();
