@@ -5,6 +5,15 @@ import "truffle/DeployedAddresses.sol";
 import "./ThrowProxy.sol";
 import "../contracts/GameRegister.sol";
 
+contract GameRegisterProxy {
+  function getOpponentAddressWhenGameIsQueued() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    register.newGame();
+    register.getOpponentAddress();
+  }
+}
+
 contract TestGameRegister {
   function testCanReturnCorrectOpponentAddressWhenPlayingTheGame() public {
     GameRegister register = new GameRegister();
@@ -27,6 +36,11 @@ contract TestGameRegister {
   }
 
   function testCannotReturnOpponentAddressWhenTheGameIsQueued() public {
+    GameRegisterProxy registerProxy = new GameRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+
+    GameRegisterProxy(address(throwProxy)).getOpponentAddressWhenGameIsQueued();
+    Assert.isFalse(throwProxy.execute(), "Did not produce error!");
   }
 
   function testCannotReturnOpponentAddressWhenNoGameWasStarted() public {
