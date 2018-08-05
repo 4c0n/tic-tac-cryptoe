@@ -111,4 +111,60 @@ contract("GameRegister", function(accounts) {
       assert.equal(e.message, "VM Exception while processing transaction: revert")
     });
   });
+
+  it("should return the correct opponent address to the player that started when playing the game", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.getOpponentAddress({from: accounts[2]});
+    }).then(function(address) {
+      assert.equal(address, accounts[3]);
+    });
+  });
+
+  it("should return the correct opponent address to the player that joined when playing the game", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.getOpponentAddress({from: accounts[3]});
+    }).then(function(address) {
+      assert.equal(address, accounts[2]);
+    });
+  });
+
+  it("should produce an error when the opponent address is requested and the player has not registered", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.getOpponentAddress({from: accounts[4]});
+    }).then(function() {
+      assert.fail("success", "fail", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
+  });
+
+  it("should produce an error when the opponent address is requested and the game no game was started", function() {
+    var register;
+
+    return GameRegister.deployed().then(function(instance) {
+      register = instance;
+      return register.newPlayer("player4", {from: accounts[4]});
+    }).then(function() {
+      return register.getOpponentAddress({from: accounts[4]});
+    }).then(function() {
+      assert.fail("success", "fail", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
+  });
+
+  it("should produce an error when the opponent address is requested and the game is queued", function() {
+     var register;
+
+    return GameRegister.deployed().then(function(instance) {
+      register = instance;
+      return register.newGame({from: accounts[4]});
+    }).then(function() {
+      return register.getOpponentAddress({from: accounts[4]});
+    }).then(function() {
+      assert.fail("success", "fail", "The call is not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert");
+    });
+  });
 });
