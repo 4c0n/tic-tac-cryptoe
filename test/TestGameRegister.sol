@@ -12,6 +12,12 @@ contract GameRegisterProxy {
     register.newGame();
     register.getOpponentAddress();
   }
+
+  function getOpponentAddressWithoutStartingGame() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    register.getOpponentAddress();
+  }
 }
 
 contract TestGameRegister {
@@ -44,7 +50,12 @@ contract TestGameRegister {
   }
 
   function testCannotReturnOpponentAddressWhenNoGameWasStarted() public {
-  }
+    GameRegisterProxy registerProxy = new GameRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+
+    GameRegisterProxy(address(throwProxy)).getOpponentAddressWithoutStartingGame();
+    Assert.isFalse(throwProxy.execute(), "Did not produce error!");
+ }
 
   function testCannotReturnOpponentAddressWhenNotRegistered() public {
   }
