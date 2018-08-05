@@ -83,6 +83,12 @@ window.TicTacCryptoeGame.prototype.listenForStartGameEvent = function(callback) 
   });
 };
 
+window.TicTacCryptoeGame.prototype.getOpponentAddress = function() {
+  return MovesRegister.deployed().then((instance) => {
+    return instance.getOpponentAddress({from: window.web3account});
+  });
+};
+
 window.TicTacCryptoeGame.prototype.isItMyTurn = function() {
   return false;
 };
