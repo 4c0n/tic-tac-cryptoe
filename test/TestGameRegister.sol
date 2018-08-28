@@ -6,6 +6,11 @@ import "./ThrowProxy.sol";
 import "../contracts/GameRegister.sol";
 
 contract GameRegisterProxy {
+  function getGamePlayingStatusWithoutRegistering() public {
+    GameRegister register = new GameRegister();
+    register.getGamePlayingStatus();
+  }
+
   function getOpponentAddressWhenGameIsQueued() public {
     GameRegister register = new GameRegister();
     register.newPlayer("player0");
@@ -26,6 +31,15 @@ contract GameRegisterProxy {
 }
 
 contract TestGameRegister {
+  function testCannotReturnStatusWhenThePlayerIsNotRegistered() public {
+    GameRegisterProxy register = new GameRegisterProxy();
+    ThrowProxy proxy = new ThrowProxy(address(register));
+    GameRegisterProxy(address(proxy)).getGamePlayingStatusWithoutRegistering();
+    bool r = proxy.execute();
+
+    Assert.isFalse(r, "No error was produced!");
+  }
+
   function testCanReturnCorrectOpponentAddressToPlayerThatStartedWhenPlayingTheGame() public {
     GameRegister register = new GameRegister();
     register.newPlayer("player0");
@@ -57,7 +71,7 @@ contract TestGameRegister {
     Assert.isTrue(r1, "r1 was supposed to be true");
 
     GameRegister(proxyAddress).newGame();
-    bool r2 = proxy.execute.gas(100000)();
+    bool r2 = proxy.execute.gas(1000000)();
     Assert.isTrue(r2, "r2 was supposed to be true");
 
     register.newGame();
