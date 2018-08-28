@@ -164,7 +164,7 @@ contract("GameRegister", function(accounts) {
     }).then(function() {
       assert.fail("success", "fail", "The call is not supposed to be successful!");
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Not playing!");
     });
   });
 });
