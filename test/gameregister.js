@@ -56,7 +56,7 @@ contract("GameRegister", function(accounts) {
       // This case should not happen
       assert.equal(0, 1);
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Player is already playing a game!");
     });
   });
 
