@@ -33,7 +33,7 @@ contract('PlayerRegister', function(accounts) {
       // The call should not be successful.
       assert.equal(1, 2);
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
     });
   });
 
@@ -44,7 +44,7 @@ contract('PlayerRegister', function(accounts) {
       // The call should not be successful.
       assert.equal(false, true);
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
     });
   });
 
@@ -71,7 +71,7 @@ contract('PlayerRegister', function(accounts) {
       // The call should not be successful
       assert.equal(1, 2);
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
     });
   });
 
@@ -82,7 +82,7 @@ contract('PlayerRegister', function(accounts) {
       // The call should not be successful
       assert.fail("success", "fail", "The call was not supposed to be successfull!");
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
     });
   });
 
@@ -109,7 +109,7 @@ contract('PlayerRegister', function(accounts) {
       // The call should not be successful
       assert.equal(1, 2);
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
     });
   });
 
@@ -119,7 +119,7 @@ contract('PlayerRegister', function(accounts) {
     }).then(function() {
       assert.fail("success", "fail", "The call was not supposed to be successful!");
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
     });
   });
 });
