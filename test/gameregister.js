@@ -45,7 +45,7 @@ contract("GameRegister", function(accounts) {
       // This case should not happen
       assert.equal(1, 0);
     }).catch(function(e) {
-      assert.equal(e.message, "VM Exception while processing transaction: revert");
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
     });
   });
 
