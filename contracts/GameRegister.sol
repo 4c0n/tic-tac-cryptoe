@@ -3,8 +3,25 @@ pragma solidity ^0.4.24;
 import "./PlayerRegister.sol";
 
 contract GameRegister is PlayerRegister {
+  enum CellState { Free, O, X }
+
   struct Game {
     uint moveCount;
+
+    // row 0
+    CellState cell0;
+    CellState cell1;
+    CellState cell2;
+
+    // row 1
+    CellState cell3;
+    CellState cell4;
+    CellState cell5;
+
+    // row 2
+    CellState cell6;
+    CellState cell7;
+    CellState cell8;
   }
 
   Game[] public games;
@@ -70,7 +87,20 @@ contract GameRegister is PlayerRegister {
       address opponentAddress = gameToPlayerThatStarted[gameId];
       emit StartGame(msg.sender, opponentAddress);
     } else {
-      gameId = games.push(Game(0));
+      gameId = games.push(
+        Game(
+          0,
+          CellState.Free,
+          CellState.Free,
+          CellState.Free,
+          CellState.Free,
+          CellState.Free,
+          CellState.Free,
+          CellState.Free,
+          CellState.Free,
+          CellState.Free
+        )
+      );
       playerToGame[playerId] = gameId;
       gameToPlayerThatStarted[gameId - 1] = msg.sender;
       waitingForOpponent = true;
