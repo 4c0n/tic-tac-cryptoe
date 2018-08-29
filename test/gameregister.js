@@ -176,4 +176,37 @@ contract("GameRegister", function(accounts) {
     });
     assert.fail("implemented", "not implemented", "test is not yet implemented");
   });
+
+  it("should be able to return the current game id when a new game is started", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.getCurrentGameId({from: accounts[0]});
+    }).then(function(gameId) {
+      assert.equal(0, gameId, "The returned game id was incorrect!");
+    });
+  });
+
+  it("should error when the current game id is requested and the account is not registered", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.getCurrentGameId({from: accounts[5]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
+    });
+  });
+
+  it("should error when the current game id is requested and no game was started", function() {
+    var register;
+
+    return GameRegister.deployed().then(function(instance) {
+      register = instance;
+      return register.newPlayer("player5", {from: accounts[5]});
+    }).then(function() {
+      return register.getCurrentGameId({from: accounts[5]});
+    }).then(function(id) {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Not playing!");
+    });
+  });
 });
