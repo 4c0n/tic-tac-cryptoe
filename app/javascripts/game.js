@@ -89,6 +89,32 @@ window.TicTacCryptoeGame.prototype.getOpponentAddress = function() {
   });
 };
 
+window.TicTacCryptoeGame.prototype.getCurrentGameId = function() {
+  return MovesRegister.deployed().then((instance) => {
+    return instance.getCurrentGameId({from: window.web3account});
+  });
+};
+
+window.TicTacCryptoeGame.prototype.getGameBoard = function(gameId) {
+  return MovesRegister.deployed().then((instance) => {
+    return instance.games(gameId, {from: window.web3account});
+  }).then((rawGame) => {
+    return {
+      moveCount: rawGame[0].toString(),
+      cell0: rawGame[1].toString(),
+      cell1: rawGame[2].toString(),
+      cell2: rawGame[3].toString(),
+      cell3: rawGame[4].toString(),
+      cell4: rawGame[5].toString(),
+      cell5: rawGame[6].toString(),
+      cell6: rawGame[7].toString(),
+      cell7: rawGame[8].toString(),
+      cell8: rawGame[9].toString()
+    };
+  });
+};
+//-------------------------------------------------------------------
+
 window.TicTacCryptoeGame.prototype.isItMyTurn = function() {
   return false;
 };
