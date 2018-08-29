@@ -33,6 +33,7 @@ contract GameRegister is PlayerRegister {
   mapping (uint => uint) playerToGame;
   mapping (uint => address) gameToPlayerThatStarted;
   mapping (uint => address) gameToPlayerThatJoined;
+  mapping (uint => address) gameToPlayerThatMadeTheLastMove;
 
   event QueuedGame(address indexed _from, uint id);
   event StartGame(address indexed _from, address indexed _to);
@@ -130,5 +131,36 @@ contract GameRegister is PlayerRegister {
     gameId--;
 
     return gameId;
+  }
+
+  function isItMyTurn() public view returns (bool) {
+    uint gameId = getCurrentGameId();
+
+    if (gameToPlayerThatMadeTheLastMove[gameId] == 0) {
+      // No move was made yet, so the player that started the game is up
+      if (gameToPlayerThatStarted[gameId] == msg.sender) {
+        return true;
+      }
+      return false;
+    }
+
+    address player = gameToPlayerThatMadeTheLastMove[gameId];
+    if (player != msg.sender) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function makeMove(uint8 x, uint8 y) public {
+    require(isItMyTurn() == true, "It is the other player's turn!");
+
+    uint gameId = getCurrentGameId();
+    Game game = games(gameId);
+
+    // TODO: Check if the cell is free
+    // TODO: Check if more moves are possible
+    // TODO: Make move
+    gameToPlayerThatMadeTheLastMove[gameId] = msg.sender;
   }
 }
