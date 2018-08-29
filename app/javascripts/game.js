@@ -100,16 +100,16 @@ window.TicTacCryptoeGame.prototype.getGameBoard = function(gameId) {
     return instance.games(gameId, {from: window.web3account});
   }).then((rawGame) => {
     return {
-      moveCount: rawGame[0].toString(),
-      cell0: rawGame[1].toString(),
-      cell1: rawGame[2].toString(),
-      cell2: rawGame[3].toString(),
-      cell3: rawGame[4].toString(),
-      cell4: rawGame[5].toString(),
-      cell5: rawGame[6].toString(),
-      cell6: rawGame[7].toString(),
-      cell7: rawGame[8].toString(),
-      cell8: rawGame[9].toString()
+      moveCount: rawGame[0].toNumber(),
+      cell0: rawGame[1].toNumber(),
+      cell1: rawGame[2].toNumber(),
+      cell2: rawGame[3].toNumber(),
+      cell3: rawGame[4].toNumber(),
+      cell4: rawGame[5].toNumber(),
+      cell5: rawGame[6].toNumber(),
+      cell6: rawGame[7].toNumber(),
+      cell7: rawGame[8].toNumber(),
+      cell8: rawGame[9].toNumber()
     };
   });
 };
