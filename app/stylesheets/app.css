@@ -3,8 +3,6 @@
   max-height: 700px;
   display: none;
   position: relative;
-  z-index: -1;
-  opacity: 0.2;
 }
 
 .game-message-text {
@@ -256,5 +254,6 @@
 .opponent-info-row {
   border-top-style: solid;
   vertical-align: middle;
+  margin-top: 25px;
   margin-bottom: 25px;
 }
