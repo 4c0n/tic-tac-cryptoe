@@ -5,6 +5,13 @@ import "truffle/DeployedAddresses.sol";
 import "./ThrowProxy.sol";
 import "../contracts/GameRegister.sol";
 
+contract GameRegisterProxy {
+  function getCurrentGameIdWithoutRegistering() public {
+    GameRegister register = new GameRegister();
+    register.getCurrentGameId();
+  }
+}
+
 contract TestGameRegisterPart2 {
   function testCanReturnCorrectGameId() public {
     GameRegister register = new GameRegister();
@@ -21,7 +28,13 @@ contract TestGameRegisterPart2 {
   }
 
   function testCannotReturnGameIdWhenNotRegistered() public {
-    Assert.fail("Implementation required!");
+    GameRegisterProxy register = new GameRegisterProxy();
+    ThrowProxy proxy = new ThrowProxy(address(register));
+
+    GameRegisterProxy(address(proxy)).getCurrentGameIdWithoutRegistering();
+    bool r = proxy.execute();
+
+    Assert.isFalse(r, "Did not produce error!");
   }
 
   function testCannotReturnGameIdWhenNotPlaying() public {
