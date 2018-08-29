@@ -10,6 +10,12 @@ contract GameRegisterProxy {
     GameRegister register = new GameRegister();
     register.getCurrentGameId();
   }
+
+  function getCurrentGameIdWithoutStartingANewGame() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    register.getCurrentGameId();
+  }
 }
 
 contract TestGameRegisterPart2 {
@@ -38,7 +44,13 @@ contract TestGameRegisterPart2 {
   }
 
   function testCannotReturnGameIdWhenNotPlaying() public {
-    Assert.fail("Implementation required!");
+    GameRegisterProxy register = new GameRegisterProxy();
+    ThrowProxy proxy = new ThrowProxy(address(register));
+
+    GameRegisterProxy(address(proxy)).getCurrentGameIdWithoutStartingANewGame();
+    bool r = proxy.execute();
+
+    Assert.isFalse(r, "Did not produce error!");
   }
 }
 
