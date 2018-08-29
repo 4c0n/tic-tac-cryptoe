@@ -113,9 +113,7 @@ contract GameRegister is PlayerRegister {
   }
 
   function getOpponentAddress() public view returns (address) {
-    requireIsPlaying();
-    uint gameId = playerToGame[getPlayerIndex()];
-    gameId--;
+    uint gameId = getCurrentGameId();
 
     address started = gameToPlayerThatStarted[gameId];
     address joined = gameToPlayerThatJoined[gameId];
@@ -124,5 +122,13 @@ contract GameRegister is PlayerRegister {
       return joined;
     }
     return started;
+  }
+
+  function getCurrentGameId() public view returns (uint) {
+    requireIsPlaying();
+    uint gameId = playerToGame[getPlayerIndex()];
+    gameId--;
+
+    return gameId;
   }
 }
