@@ -103,17 +103,5 @@ contract TestGameRegister {
     GameRegisterProxy(address(throwProxy)).getOpponentAddressWithoutRegistering();
     Assert.isFalse(throwProxy.execute(), "Did not produce error!");
   }
-
-  function testCanReturnCorrectGameId() public {
-    Assert.fail("Implementation required!");
-  }
-
-  function testCannotReturnGameIdWhenNotRegistered() public {
-    Assert.fail("Implementation required!");
-  }
-
-  function testCannotReturnGameIdWhenNotPlaying() public {
-    Assert.fail("Implementation required!");
-  }
 }
 
