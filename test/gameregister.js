@@ -154,7 +154,7 @@ contract("GameRegister", function(accounts) {
   });
 
   it("should produce an error when the opponent address is requested and the game is queued", function() {
-     var register;
+    var register;
 
     return GameRegister.deployed().then(function(instance) {
       register = instance;
@@ -166,5 +166,14 @@ contract("GameRegister", function(accounts) {
     }).catch(function(e) {
       assert.equal(e.message, "VM Exception while processing transaction: revert Not playing!");
     });
+  });
+
+  it("should be able to return the game board when a game was started", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.games(0, {from: accounts[0]});
+    }).then(function(game) {
+      assert.lengthOf(game, 10, "Returned array does not have enough members!");
+    });
+    assert.fail("implemented", "not implemented", "test is not yet implemented");
   });
 });
