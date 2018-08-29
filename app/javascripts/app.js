@@ -9,7 +9,7 @@ const DRAW = 'DRAW';
 window.TicTacCryptoe = {
   _game: null,
 
-  _registerHandlers: function() {
+  _registerGameBoardHandlers: function() {
     $('.game-cell').click((event) => {
       this._cellClickHandler(event.currentTarget);
     });
@@ -72,13 +72,15 @@ window.TicTacCryptoe = {
             this._showLoadingScreen();
             // init the opponent info
             this._initOpponentInfo(result.args._from);
-            // TODO: init the game board
+            // init the game board
+            this._initGameBoard();
             this._hideLoadingScreen();
           } else if (result.args._from === window.web3account) {
             this._hideNewGamePane();
             this._showLoadingScreen();
             this._initOpponentInfo(result.args._to);
-            // TODO: init the game board
+            // init the game board
+            this._initGameBoard();
             this._hideLoadingScreen();
           }
         } else {
@@ -140,11 +142,6 @@ window.TicTacCryptoe = {
   _hideQueuedGamePane: function() {
     let pane = $('.queued-game-pane');
     pane.fadeOut(1000);
-  },
-
-  _initPlayerInfoAndGameBoard: function(playerName = null) {
-    this._initPlayerInfo(playerName);
-    this._initGameBoard();
   },
 
   __initPlayerInfo: function(playerName, winCount, lossCount) {
@@ -226,14 +223,39 @@ window.TicTacCryptoe = {
     });
   },
 
+  __initGameBoard: function(game) {
+    $('#game-cell-text-0-0').html((game.cell0 === 1) ? ('O') : ((game.cell0 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-1-0').html((game.cell1 === 1) ? ('O') : ((game.cell1 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-2-0').html((game.cell2 === 1) ? ('O') : ((game.cell2 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-0-1').html((game.cell3 === 1) ? ('O') : ((game.cell3 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-1-1').html((game.cell4 === 1) ? ('O') : ((game.cell4 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-2-1').html((game.cell5 === 1) ? ('O') : ((game.cell5 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-0-2').html((game.cell6 === 1) ? ('O') : ((game.cell6 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-1-2').html((game.cell7 === 1) ? ('O') : ((game.cell7 === 2) ? ('X') : ('&nbsp;')));
+    $('#game-cell-text-2-2').html((game.cell8 === 1) ? ('O') : ((game.cell8 === 2) ? ('X') : ('&nbsp;')));
+    this._registerGameBoardHandlers();
+  },
+
   _initGameBoard: function() {
-    let gameBoard = $('.game-board');
-    gameBoard.show();
-    gameBoard.css("opacity", 1);
+    this._game.getCurrentGameId().then((id) => {
+      this._game.getGameBoard(id.toString()).then((game) => {
+        this.__initGameBoard(game);
+        let gameBoard = $('.game-board');
+        gameBoard.fadeIn(1000);
+      }).catch((e) => {
+        // TODO: handle this error
+        console.error(e);
+      });
+    }).catch((e) => {
+      // TODO: handle this error
+      console.error(e);
+    });
   },
 
   _cellClickHandler: function(cellElement) {
-    // Check if it is really the users turn to play
+    console.log(cellElement);
+
+/*    // Check if it is really the users turn to play
     if (!this.isItMyTurn()) {
       return;
     }
@@ -272,6 +294,7 @@ window.TicTacCryptoe = {
     if (state !== MORE_MOVES_POSSIBLE) {
       $('.game-cell').off();
     }
+*/
   },
 
   _getCoords: (cellElementId) => {
@@ -303,7 +326,8 @@ window.TicTacCryptoe = {
           // init opponent info
           this._game.getOpponentAddress().then((address) => {
             this._initOpponentInfo(address);
-            // TODO: init game board
+            // init game board
+            this._initGameBoard();
           }).catch((e) => {
             // TODO: handle this error
             console.error(e);
