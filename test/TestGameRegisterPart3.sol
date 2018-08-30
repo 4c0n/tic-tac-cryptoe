@@ -24,6 +24,12 @@ contract GameRegisterProxy {
     GameRegister register = new GameRegister();
     register.isItMyTurn();
   }
+
+  function getIsItMyTurnWhenRegisteredButNoGameWasStarted() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    register.isItMyTurn();
+  }
 }
 
 contract TestGameRegisterPart3 {
@@ -64,7 +70,13 @@ contract TestGameRegisterPart3 {
   }
 
   function testCannotReturnWhosTurnItIsWhenRegisteredButNoGameWasStarted() public {
-    Assert.fail("Test not yet implemented");
+    GameRegisterProxy register = new GameRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(register));
+
+    GameRegisterProxy(address(throwProxy)).getIsItMyTurnWhenRegisteredButNoGameWasStarted();
+    bool r = throwProxy.execute.gas(100000)();
+
+    Assert.isFalse(r, "Error was not produced!");
   }
 }
 
