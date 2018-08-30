@@ -8,6 +8,8 @@ const DRAW = 'DRAW';
 
 window.TicTacCryptoe = {
   _game: null,
+  playerName: null,
+  opponentName: null,
 
   _registerGameBoardHandlers: function() {
     $('.game-cell').click((event) => {
@@ -145,6 +147,7 @@ window.TicTacCryptoe = {
   },
 
   __initPlayerInfo: function(playerName, winCount, lossCount) {
+    this.playerName = playerName;
     let playerInfo = $('.player-info');
     playerInfo.show();
     playerInfo.css("opacity", 1);
@@ -191,6 +194,7 @@ window.TicTacCryptoe = {
   },
 
   __initOpponentInfo: function(playerName, winCount, lossCount) {
+    this.opponentName = playerName;
     let opponentInfo = $('.opponent-info');
     opponentInfo.show();
     $('#opponent-info-name').html(playerName);
@@ -240,6 +244,7 @@ window.TicTacCryptoe = {
     this._game.getCurrentGameId().then((id) => {
       this._game.getGameBoard(id.toString()).then((game) => {
         this.__initGameBoard(game);
+        this._initGameBoardMessage();
         let gameBoard = $('.game-board');
         gameBoard.fadeIn(1000);
       }).catch((e) => {
@@ -252,8 +257,22 @@ window.TicTacCryptoe = {
     });
   },
 
+  _initGameBoardMessage: function() {
+    this._game.isItMyTurn().then((isMyTurn) => {
+      let message;
+      if (isMyTurn) {
+        message = 'Your turn ' + this.playerName + '!';
+      } else {
+        message = this.opponentName + ' is up!';
+      }
+      $('#game-message-text').html(message);
+    }).catch((e) => {
+      console.error(e);
+      // TODO: handle this error
+    });
+  },
+
   _cellClickHandler: function(cellElement) {
-    console.log(cellElement);
 
 /*    // Check if it is really the users turn to play
     if (!this.isItMyTurn()) {

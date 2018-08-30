@@ -113,14 +113,17 @@ window.TicTacCryptoeGame.prototype.getGameBoard = function(gameId) {
     };
   });
 };
-//-------------------------------------------------------------------
 
 window.TicTacCryptoeGame.prototype.isItMyTurn = function() {
-  return false;
+  return MovesRegister.deployed().then((instance) => {
+    return instance.isItMyTurn({from: window.web3account});
+  });
 };
 
+//-------------------------------------------------------------------
+
 window.TicTacCryptoeGame.prototype.isCellOccupied = function(coords) {
-  return this._state[coords.y][coords.x] !== null;
+  return false;
 };
 
 window.TicTacCryptoeGame.prototype.makeMove = function(coords, playerId) {
