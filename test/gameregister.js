@@ -209,4 +209,20 @@ contract("GameRegister", function(accounts) {
       assert.equal(e.message, "VM Exception while processing transaction: revert Not playing!");
     });
   });
+
+  it("should return if it is the player his/her turn correctly when no moves were made to the player that started the game!", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.isItMyTurn({from: accounts[0]});
+    }).then(function(isMyTurn) {
+      assert.isTrue(isMyTurn, "It is not the player's turn, but it should be!");
+    });
+  });
+
+  it("should return if it is the player his/her turn correctly when no moves were made to the player that joined the game!", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.isItMyTurn({from: accounts[1]});
+    }).then(function(isMyTurn) {
+      assert.isFalse(isMyTurn, "It is the player's turn, but it should not be!");
+    });
+  });
 });
