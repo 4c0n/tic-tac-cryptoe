@@ -3,6 +3,7 @@ pragma solidity ^0.4.24;
 import "./PlayerRegister.sol";
 
 contract GameRegister is PlayerRegister {
+  enum GameState { Player0Won, Player1Won, MoreMovesPossible, Draw }
   enum CellState { Free, O, X }
 
   struct Game {
@@ -37,6 +38,7 @@ contract GameRegister is PlayerRegister {
 
   event QueuedGame(address indexed _from, uint id);
   event StartGame(address indexed _from, address indexed _to);
+  event MadeMove(address indexed _from, uint gameId, uint8 x, uint8 y);
 
   function requirePlayerIsNotAlreadyPlaying() private view {
     require(
@@ -53,6 +55,48 @@ contract GameRegister is PlayerRegister {
       (gameId != 0) && !(waitingForOpponent && getGameIndexThatIsWaiting() == (gameId - 1)),
       "Not playing!"
     );
+  }
+
+  function requireCellIsFree(Game game, uint8 x, uint8 y) private pure returns (bool) {
+    CellState state;
+    if (x == 0) {
+      if (y == 0) {
+        state = game.cell0;
+      } else if (y == 1) {
+        state = game.cell1;
+      } else if (y == 2) {
+        state = game.cell2;
+      }
+    } else if (x == 1) {
+      if (y == 0) {
+        state = game.cell3;
+      } else if (y == 1) {
+        state = game.cell4;
+      } else if (y == 2) {
+        state = game.cell5;
+      }
+    } else if (x == 2) {
+      if (y == 0) {
+        state = game.cell6;
+      } else if (y == 1) {
+        state = game.cell7;
+      } else if (y == 2) {
+        state = game.cell8;
+      }
+    }
+    require(state == CellState.Free, "Cell is occupied!");
+  }
+
+  function isWinner(address player) private view returns (bool) {
+    return false;
+  }
+
+  function moreMovesPossible(uint gameId) private view returns (bool) {
+    Game storage game = games[gameId];
+    if (game.moveCount < 9) {
+      return true;
+    }
+    return false;
   }
 
   function getGameIndexThatIsWaiting() internal view returns (uint) {
@@ -134,6 +178,7 @@ contract GameRegister is PlayerRegister {
   }
 
   function isItMyTurn() public view returns (bool) {
+    requireIsPlaying();
     uint gameId = getCurrentGameId();
 
     if (gameToPlayerThatMadeTheLastMove[gameId] == 0) {
@@ -152,15 +197,68 @@ contract GameRegister is PlayerRegister {
     return false;
   }
 
+  function getGameState(uint gameId) public view returns (GameState) {
+    requireIsPlaying();
+    address player0 = gameToPlayerThatStarted[gameId];
+    address player1 = gameToPlayerThatJoined[gameId];
+
+    if (isWinner(player0)) {
+      return GameState.Player0Won;
+    } else if (isWinner(player1)) {
+      return GameState.Player1Won;
+    } else if (moreMovesPossible(gameId)) {
+      return GameState.MoreMovesPossible;
+    }
+    return GameState.Draw;
+  }
+
   function makeMove(uint8 x, uint8 y) public {
     require(isItMyTurn() == true, "It is the other player's turn!");
 
     uint gameId = getCurrentGameId();
-    Game game = games(gameId);
+    Game storage game = games[gameId];
 
-    // TODO: Check if the cell is free
-    // TODO: Check if more moves are possible
-    // TODO: Make move
+    // Check if the cell is free
+    requireCellIsFree(game, x, y);
+
+    // Check if more moves are possible
+    GameState gameState = getGameState(gameId);
+    require(gameState == GameState.MoreMovesPossible, "No more moves can be made!");
+
+    // Make move
+    CellState cellState = CellState.O;
+    if (msg.sender == gameToPlayerThatJoined[gameId]) {
+      cellState = CellState.X;
+    }
+
+    if (x == 0) {
+      if (y == 0) {
+        game.cell0 = cellState;
+      } else if (y == 1) {
+        game.cell1 = cellState;
+      } else if (y == 2) {
+        game.cell2 = cellState;
+      }
+    } else if (x == 1) {
+      if (y == 0) {
+        game.cell3 = cellState;
+      } else if (y == 1) {
+        game.cell4 = cellState;
+      } else if (y == 2) {
+        game.cell5 = cellState;
+      }
+    } else if (x == 2) {
+      if (y == 0) {
+        game.cell6 = cellState;
+      } else if (y == 1) {
+        game.cell7 = cellState;
+      } else if (y == 2) {
+        game.cell8 = cellState;
+      }
+    }
+
+    game.moveCount++;
     gameToPlayerThatMadeTheLastMove[gameId] = msg.sender;
+    emit MadeMove(msg.sender, gameId, x, y);
   }
 }
