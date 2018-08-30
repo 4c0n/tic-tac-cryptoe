@@ -14,7 +14,7 @@ contract GameRegisterProxy {
     return register.isItMyTurn();
   }
 
-  function getIsItMyTurnWhenAMoveWasMade() public returns (bool) {
+  function getIsItMyTurnWhenAMoveWasMade() public view returns (bool) {
     GameRegister register = GameRegister(DeployedAddresses.MovesRegister());
 
     return register.isItMyTurn();
