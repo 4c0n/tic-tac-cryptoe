@@ -24,15 +24,21 @@ contract TestGameRegisterPart4 {
 
     Assert.isFalse(r, "Error was not produced!");
   }
-/*
+
   function testCannotMakeMoveWhenNotRegistered() public {
-    Assert.fail("Test is not implemented yet!");
+    GameRegister register = new GameRegister();
+    ThrowProxy proxy = new ThrowProxy(address(register));
+
+    GameRegister(address(proxy)).makeMove(0, 0);
+    bool r = proxy.execute.gas(100000)();
+
+    Assert.isFalse(r, "Error was not produced!");
   }
 
   function testCannotMakeMoveWhenRegisteredButNoGameWasStarted() public {
     Assert.fail("Test is not implemented yet!");
   }
-
+/*
   function testCannotMakeMoveWhenRegisteredButGameIsQueued() public {
     Assert.fail("Test is not implemented yet!");
   }
