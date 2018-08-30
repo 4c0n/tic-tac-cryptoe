@@ -16,21 +16,62 @@ contract GameRegisterProxy {
     register.newPlayer("player0");
     register.getCurrentGameId();
   }
-}
+  function getGamePlayingStatusWithoutRegistering() public {
+    GameRegister register = new GameRegister();
+    register.getGamePlayingStatus();
+  }
 
-contract TestGameRegisterPart2 {
-  function testCanReturnCorrectGameId() public {
+  function getOpponentAddressWhenGameIsQueued() public {
     GameRegister register = new GameRegister();
     register.newPlayer("player0");
     register.newGame();
+    register.getOpponentAddress();
+  }
 
+  function getOpponentAddressWithoutStartingGame() public {
+    GameRegister register = new GameRegister();
+    register.newPlayer("player0");
+    register.getOpponentAddress();
+  }
+
+  function getOpponentAddressWithoutRegistering() public {
+    GameRegister register = new GameRegister();
+    register.getOpponentAddress();
+  }
+}
+
+contract TestGameRegisterPart2 {
+  function testCannotReturnStatusWhenThePlayerIsNotRegistered() public {
+    GameRegisterProxy register = new GameRegisterProxy();
     ThrowProxy proxy = new ThrowProxy(address(register));
-    GameRegister(address(proxy)).newPlayer("player1");
-    proxy.execute.gas(100000)();
-    GameRegister(address(proxy)).newGame();
-    proxy.execute.gas(100000)();
+    GameRegisterProxy(address(proxy)).getGamePlayingStatusWithoutRegistering();
+    bool r = proxy.execute();
 
-    Assert.equal(0, register.getCurrentGameId(), "Did not return correct game id!");
+    Assert.isFalse(r, "No error was produced!");
+  }
+
+  function testCannotReturnOpponentAddressWhenTheGameIsQueued() public {
+    GameRegisterProxy registerProxy = new GameRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+
+    GameRegisterProxy(address(throwProxy)).getOpponentAddressWhenGameIsQueued();
+    Assert.isFalse(throwProxy.execute(), "Did not produce error!");
+  }
+
+  function testCannotReturnOpponentAddressWhenNoGameWasStarted() public {
+    GameRegisterProxy registerProxy = new GameRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+
+    GameRegisterProxy(address(throwProxy)).getOpponentAddressWithoutStartingGame();
+    Assert.isFalse(throwProxy.execute(), "Did not produce error!");
+ }
+
+  function testCannotReturnOpponentAddressWhenNotRegistered() public {
+    GameRegisterProxy registerProxy = new GameRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(registerProxy));
+
+    GameRegisterProxy(address(throwProxy)).getOpponentAddressWithoutRegistering();
+    Assert.isFalse(throwProxy.execute(), "Did not produce error!");
   }
 
   function testCannotReturnGameIdWhenNotRegistered() public {
