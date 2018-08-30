@@ -44,11 +44,30 @@ contract TestGameRegisterPart5 {
 
     Assert.isFalse(r, "Error was not produced!");
   }
-/*
-  function testCannotMakeMoveWhenTheCellIsNotFree() public {
-    Assert.fail("Test is not implemented yet!");
-  }
 
+  function testCannotMakeMoveWhenTheCellIsNotFree() public {
+    GameRegister register = new GameRegister();
+    ThrowProxy proxy = new ThrowProxy(address(register));
+
+    register.newPlayer("player0");
+    register.newGame();
+
+    GameRegister(address(proxy)).newPlayer("player1");
+    bool r1 = proxy.execute.gas(100000)();
+    Assert.isTrue(r1, "r1 was supposed to be true");
+
+    GameRegister(address(proxy)).newGame();
+    bool r2 = proxy.execute.gas(200000)();
+    Assert.isTrue(r2, "r2 was supposed to be true");
+
+    register.makeMove(0, 0);
+
+    GameRegister(address(proxy)).makeMove(0, 0);
+    bool r = proxy.execute.gas(100000)();
+
+    Assert.isFalse(r, "Error was not produced!");
+  }
+/*
   function testCannotMakeMoveWhenNoMoreMovesArePossible() public {
     Assert.fail("Test is not implemented yet!");
   }
