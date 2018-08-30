@@ -19,6 +19,11 @@ contract GameRegisterProxy {
 
     return register.isItMyTurn();
   }
+
+  function getIsItMyTurnWithoutRegistering() public {
+    GameRegister register = new GameRegister();
+    register.isItMyTurn();
+  }
 }
 
 contract TestGameRegisterPart3 {
@@ -46,6 +51,20 @@ contract TestGameRegisterPart3 {
   function testCanReturnWhosTurnItIsWhenMovesWereMadeToThePlayerThatJoined() public {
     bool r = proxy.getIsItMyTurnWhenAMoveWasMade();
     Assert.isTrue(r, "It is not the player's turn, but it should be");
+  }
+
+  function testCannotReturnWhosTurnItIsWhenNotRegistered() public {
+    GameRegisterProxy register = new GameRegisterProxy();
+    ThrowProxy throwProxy = new ThrowProxy(address(register));
+
+    GameRegisterProxy(address(throwProxy)).getIsItMyTurnWithoutRegistering();
+    bool r = throwProxy.execute();
+
+    Assert.isFalse(r, "Error was not produced!");
+  }
+
+  function testCannotReturnWhosTurnItIsWhenRegisteredButNoGameWasStarted() public {
+    Assert.fail("Test not yet implemented");
   }
 }
 
