@@ -225,4 +225,45 @@ contract("GameRegister", function(accounts) {
       assert.isFalse(isMyTurn, "It is the player's turn, but it should not be!");
     });
   });
+
+  it("should return if it is the player his/her turn correctly when moves were made to the player that started the game!", function() {
+    var register;
+
+    return GameRegister.deployed().then(function(instance) {
+      register = instance;
+      return register.makeMove(0, 0, {from: accounts[0]});
+    }).then(function() {
+      return register.isItMyTurn({from: accounts[0]});
+    }).then(function(isMyTurn) {
+      assert.isFalse(isMyTurn, "It is the player's turn, but it should not be!");
+    });
+  });
+
+  it("should return if it is the player his/her turn correctly when moves were made to the player that joined the game!", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.isItMyTurn({from: accounts[1]});
+    }).then(function(isMyTurn) {
+      assert.isTrue(isMyTurn, "It is not the player's turn, but it should be!");
+    });
+  });
+
+  it("should error when isItMyTurn() is called, but the player is not registered", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.isItMyTurn({from: accounts[6]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
+    });
+  });
+
+  it("should error when isItMyTurn() is called, the player is registered, but no game was started", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.isItMyTurn({from: accounts[5]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Not playing!");
+    });
+  });
 });
