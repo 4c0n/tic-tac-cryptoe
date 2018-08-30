@@ -47,26 +47,5 @@ contract TestGameRegisterPart4 {
 
     Assert.isFalse(r, "Error was not produced!");
   }
-/*
-  function testCannotMakeMoveWhenRegisteredButGameIsQueued() public {
-    Assert.fail("Test is not implemented yet!");
-  }
-
-  function testCannotMakeMoveWhenItIsNotThePlayerHisTurn() public {
-    Assert.fail("Test is not implemented yet!");
-  }
-
-  function testCannotMakeMoveWhenTheCellIsNotFree() public {
-    Assert.fail("Test is not implemented yet!");
-  }
-
-  function testCannotMakeMoveWhenNoMoreMovesArePossible() public {
-    Assert.fail("Test is not implemented yet!");
-  }
-
-  function testCanMakeMove() public {
-    Assert.fail("Test is not implemented yet!");
-  }
-*/
 }
 
