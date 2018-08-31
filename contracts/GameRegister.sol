@@ -31,7 +31,7 @@ contract GameRegister is PlayerRegister {
   bool waitingForOpponent;
 
   // Game id is also off by +1 for the same reason
-  mapping (uint => uint) playerToGame;
+  mapping (address => uint) playerToGame;
   mapping (uint => address) gameToPlayerThatStarted;
   mapping (uint => address) gameToPlayerThatJoined;
   mapping (uint => address) gameToPlayerThatMadeTheLastMove;
@@ -42,15 +42,14 @@ contract GameRegister is PlayerRegister {
 
   function requirePlayerIsNotAlreadyPlaying() private view {
     require(
-      playerToGame[getPlayerIndex()] == 0,
+      playerToGame[msg.sender] == 0,
       "Player is already playing a game!"
     );
   }
 
   function requireIsPlaying() private view {
     requirePlayerExists();
-    uint playerId = getPlayerIndex();
-    uint gameId = playerToGame[playerId];
+    uint gameId = playerToGame[msg.sender];
     require(
       (gameId != 0) && !(waitingForOpponent && getGameIndexThatIsWaiting() == (gameId - 1)),
       "Not playing!"
@@ -88,6 +87,26 @@ contract GameRegister is PlayerRegister {
   }
 
   function isWinner(address player) private view returns (bool) {
+    uint gameId = playerToGame[player] - 1;
+    address started = gameToPlayerThatStarted[gameId];
+
+    CellState state = CellState.X;
+    if (player == started) {
+      state = CellState.O;
+    }
+
+    Game storage game = games[gameId];
+    if ((game.cell0 == state && game.cell1 == state && game.cell2 == state) || // horizontal rows
+        (game.cell3 == state && game.cell4 == state && game.cell5 == state) ||
+        (game.cell6 == state && game.cell7 == state && game.cell8 == state) ||
+        (game.cell0 == state && game.cell3 == state && game.cell6 == state) || // vertical rows
+        (game.cell1 == state && game.cell4 == state && game.cell7 == state) ||
+        (game.cell2 == state && game.cell5 == state && game.cell8 == state) ||
+        (game.cell0 == state && game.cell4 == state && game.cell8 == state) || // diagonal rows
+        (game.cell2 == state && game.cell4 == state && game.cell6 == state)) {
+      return true;
+    }
+
     return false;
   }
 
@@ -105,8 +124,7 @@ contract GameRegister is PlayerRegister {
 
   function getGamePlayingStatus() public view returns (string) {
     requirePlayerExists();
-    uint playerId = getPlayerIndex();
-    uint gameId = playerToGame[playerId];
+    uint gameId = playerToGame[msg.sender];
     if (gameId != 0) {
       gameId--;
       // a game was started
@@ -122,11 +140,10 @@ contract GameRegister is PlayerRegister {
     requirePlayerExists();
     requirePlayerIsNotAlreadyPlaying();
 
-    uint playerId = getPlayerIndex();
     uint gameId;
     if (waitingForOpponent) {
       gameId = getGameIndexThatIsWaiting();
-      playerToGame[playerId] = gameId + 1;
+      playerToGame[msg.sender] = gameId + 1;
       gameToPlayerThatJoined[gameId] = msg.sender;
       waitingForOpponent = false;
       address opponentAddress = gameToPlayerThatStarted[gameId];
@@ -146,7 +163,7 @@ contract GameRegister is PlayerRegister {
           CellState.Free
         )
       );
-      playerToGame[playerId] = gameId;
+      playerToGame[msg.sender] = gameId;
       gameToPlayerThatStarted[gameId - 1] = msg.sender;
       waitingForOpponent = true;
       emit QueuedGame(msg.sender, gameId);
@@ -171,7 +188,7 @@ contract GameRegister is PlayerRegister {
 
   function getCurrentGameId() public view returns (uint) {
     requireIsPlaying();
-    uint gameId = playerToGame[getPlayerIndex()];
+    uint gameId = playerToGame[msg.sender];
     gameId--;
 
     return gameId;
