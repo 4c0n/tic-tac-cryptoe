@@ -266,4 +266,32 @@ contract("GameRegister", function(accounts) {
       assert.equal(e.message, "VM Exception while processing transaction: revert Not playing!");
     });
   });
+
+  it("should error when makeMove() is called, but the player is not registered", function() {
+    assert.fail("", "", "Needs implementation");
+  });
+
+  it("should error when makeMove() is called, the player is registered, but did not start a game", function() {
+    assert.fail("", "", "Needs implementation");
+  });
+
+  it("should error when makeMove() is called, but the game is queued", function() {
+    assert.fail("", "", "Needs implementation");
+  });
+
+  it("should error when makeMove() is called, but it is not the player's turn", function() {
+    assert.fail("", "", "Needs implementation");
+  });
+
+  it("should error when makeMove() is called, but that move has already been made", function() {
+    assert.fail("", "", "Needs implementation");
+  });
+
+  it("should error when makeMove() is called, but no more moves are possibble", function() {
+    assert.fail("", "", "Needs implementation");
+  });
+
+  it("should receive event after making a valid move", function() {
+    assert.fail("", "", "Needs implementation");
+  });
 });
