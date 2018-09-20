@@ -298,7 +298,13 @@ contract("GameRegister", function(accounts) {
   });
 
   it("should error when makeMove() is called, but it is not the player's turn", function() {
-    assert.fail("", "", "Needs implementation");
+   return GameRegister.deployed().then(function(instance) {
+      return instance.makeMove(0, 0, {from: accounts[3]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert It is the other player's turn!");
+    });
   });
 
   it("should error when makeMove() is called, but that move has already been made", function() {
