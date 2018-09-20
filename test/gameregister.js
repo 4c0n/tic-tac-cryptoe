@@ -339,7 +339,19 @@ contract("GameRegister", function(accounts) {
     });
   });
 
-  it("should error when makeMove() is called, but no more moves are possibble", function() {
-    assert.fail("", "", "Needs implementation");
+  it("should error when makeMove() is called, but no more moves are possible (player0 has won)", function() {
+    var register;
+    return GameRegister.deployed().then(function(instance) {
+      register = instance;
+      return register.makeMove(1, 0, {from: accounts[0]});
+    }).then(function() {
+      return register.makeMove(1, 1, {from: accounts[1]});
+    }).then(function() {
+      return register.makeMove(2, 0, {from: accounts[0]}); // player0 won
+    }).then(function() {
+      return register.makeMove(2, 1, {from: accounts[1]});
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert No more moves can be made!");
+    });
   });
 });
