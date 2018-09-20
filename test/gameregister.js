@@ -308,6 +308,16 @@ contract("GameRegister", function(accounts) {
   });
 
   it("should error when makeMove() is called, but that move has already been made", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.makeMove(0, 0, {from: accounts[1]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Cell is occupied!");
+    });
+  });
+
+  it("should error when makeMove() is called, but that move has already been made by the same player", function() {
     assert.fail("", "", "Needs implementation");
   });
 
