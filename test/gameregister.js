@@ -288,7 +288,13 @@ contract("GameRegister", function(accounts) {
   });
 
   it("should error when makeMove() is called, but the game is queued", function() {
-    assert.fail("", "", "Needs implementation");
+    return GameRegister.deployed().then(function(instance) {
+      return instance.makeMove(0, 0, {from: accounts[4]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Not playing!");
+    });
   });
 
   it("should error when makeMove() is called, but it is not the player's turn", function() {
