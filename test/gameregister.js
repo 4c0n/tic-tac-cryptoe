@@ -268,7 +268,13 @@ contract("GameRegister", function(accounts) {
   });
 
   it("should error when makeMove() is called, but the player is not registered", function() {
-    assert.fail("", "", "Needs implementation");
+    return GameRegister.deployed().then(function(instance) {
+      return instance.makeMove(0, 0, {from: accounts[6]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Account is not registered as a player!");
+    });
   });
 
   it("should error when makeMove() is called, the player is registered, but did not start a game", function() {
