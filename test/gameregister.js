@@ -317,15 +317,29 @@ contract("GameRegister", function(accounts) {
     });
   });
 
+  it("should receive event after making a valid move", function() {
+    return GameRegister.deployed().then(function(instance) {
+      return instance.makeMove(0, 1, {from: accounts[1]});
+    }).then(function(tx) {
+      assert.equal(tx.logs[0].event, "MadeMove");
+      assert.equal(tx.logs[0].args._from, accounts[1]);
+      assert.equal(tx.logs[0].args.gameId, 0);
+      assert.equal(tx.logs[0].args.x, 0);
+      assert.equal(tx.logs[0].args.y, 1);
+    });
+  });
+
   it("should error when makeMove() is called, but that move has already been made by the same player", function() {
-    assert.fail("", "", "Needs implementation");
+    return GameRegister.deployed().then(function(instance) {
+      return instance.makeMove(0, 0, {from: accounts[0]});
+    }).then(function() {
+      assert.fail("", "", "The call was not supposed to be successful!");
+    }).catch(function(e) {
+      assert.equal(e.message, "VM Exception while processing transaction: revert Cell is occupied!");
+    });
   });
 
   it("should error when makeMove() is called, but no more moves are possibble", function() {
-    assert.fail("", "", "Needs implementation");
-  });
-
-  it("should receive event after making a valid move", function() {
     assert.fail("", "", "Needs implementation");
   });
 });
